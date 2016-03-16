@@ -6,12 +6,11 @@ var port = process.env.PORT || 3000;
 
 var config = require("./config");
 
-
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.send('Yo !');
 })
 
-app.get('/touchscreen', function(req, res){
+app.get('/touchscreen', function(req, res) {
   res.send('Touchscreen');
 })
 
@@ -29,9 +28,20 @@ server.listen( port, function( ) {
 
 app.use( express.static( __dirname + '/public' ) );
 
+// generate cells
+var NB_CELLS = 45;
+
+var cells = Array.apply(null, Array(NB_CELLS)).map(function(d,i){
+  // console.log(d,i);
+  return {x : 0, y : 0 }
+})
+console.log(cells);
+
 io.on( 'connection', function( socket ) {
 
     console.log("connected");
+
+
 
     socket.on( 'click', function( data ) {
     	console.log('click', data);
