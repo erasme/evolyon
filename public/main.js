@@ -9,6 +9,10 @@ $( function() {
 			console.log(data);
 		});
 
+		socket.on( 'tuio', function(data){
+			console.log(data);
+		});
+
 		body.addEventListener('click', function(e){
 			console.log('click', { x:e.clientX, y:e.clientY } );
 			socket.emit('click', { x:e.clientX, y:e.clientY } );

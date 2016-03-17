@@ -6,6 +6,10 @@ var port = process.env.PORT || 3010;
 
 var config = require("./config");
 
+var CaressServer = require('caress-server');
+var caress = new CaressServer('0.0.0.0', 3333, {json: true});
+
+
 app.get('/', function(req, res) {
   res.sendfile('public/index.html');
 })
@@ -42,6 +46,10 @@ io.on( 'connection', function( socket ) {
     console.log("connected");
 
     socket.emit('cells', cells)
+
+    caress.on('tuio', function(msg){
+      socket.emit('tuio', msg);
+    });
 
     socket.on( 'click', function( data ) {
     	console.log('click', data);
