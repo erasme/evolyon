@@ -1,7 +1,14 @@
-var osc = require('node-osc');
+// var osc = require('node-osc');
+//
+// var oscServer = new osc.Server(3333, '0.0.0.0');
+//
+// oscServer.on("message", function (msg, rinfo) {
+//   console.log("TUIO message:"); console.log(msg);
+// });
 
-var oscServer = new osc.Server(3333, '0.0.0.0');
+var CaressServer = require('caress-server');
+var caress = new CaressServer('0.0.0.0', 3333, {json: true});
 
-oscServer.on("message", function (msg, rinfo) {
-  console.log("TUIO message:"); console.log(msg);
+caress.on('tuio', function(msg){
+  console.log(msg);
 });
