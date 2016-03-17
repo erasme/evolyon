@@ -7,7 +7,7 @@ var port = process.env.PORT || 3000;
 var config = require("./config");
 
 app.get('/', function(req, res) {
-  res.send('Yo !');
+  res.sendfile('public/index.html');
 })
 
 app.get('/touchscreen', function(req, res) {
@@ -32,23 +32,28 @@ app.use( express.static( __dirname + '/public' ) );
 var NB_CELLS = 45;
 
 var cells = Array.apply(null, Array(NB_CELLS)).map(function(d,i){
-  // console.log(d,i);
-  return {x : 0, y : 0 }
+  return {x : randomInt(0, 600), y : randomInt(0,600) }
 })
+
 console.log(cells);
 
 io.on( 'connection', function( socket ) {
 
     console.log("connected");
 
-
+    socket.emit('cells', cells)
 
     socket.on( 'click', function( data ) {
     	console.log('click', data);
         socket.broadcast.emit( 'new click', data );
-    } );
+    });
 
     // when the user disconnects.. perform this
     socket.on( 'disconnect', function( ) {
     } );
 } );
+
+function randomInt(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
