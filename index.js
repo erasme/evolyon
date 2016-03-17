@@ -5,9 +5,14 @@ var io = require( 'socket.io' )( server );
 var port = process.env.PORT || 3010;
 
 var config = require("./config");
+//
+// var CaressServer = require('caress-server');
+// var caress = new CaressServer('0.0.0.0', 3333, {json: true});
 
-var CaressServer = require('caress-server');
-var caress = new CaressServer('0.0.0.0', 3333, {json: true});
+var serialport = require("serialport");
+var SerialPort = serialport.SerialPort;
+
+var ootsidebox = new SerialPort("/dev/ttyACM0", { baudrate: 115200, parser: serialport.parsers.readline("\n") } );
 
 
 app.get('/', function(req, res) {
@@ -39,26 +44,46 @@ var cells = Array.apply(null, Array(NB_CELLS)).map(function(d,i){
   return {x : randomInt(0, 600), y : randomInt(0,600) }
 })
 
-console.log(cells);
+// console.log(cells);
 
-io.on( 'connection', function( socket ) {
+ootsidebox.on('open', function(){
+  console.log('Serial Port Opend');
 
-    console.log("connected");
+  io.on( 'connection', function( socket ) {
 
-    socket.emit('cells', cells)
+      console.log("connected");
 
-    caress.on('tuio', function(msg){
-      socket.emit('tuio', msg);
-    });
+      socket.emit('cells', cells)
 
-    socket.on( 'click', function( data ) {
-    	console.log('click', data);
-        socket.broadcast.emit( 'new click', data );
-    });
+
+        ootsidebox.write("V\n", function(err, results) {
+          console.log('err ' + err);
+          console.log('results ' + results);
+        });
+
+        ootsidebox.on('data', function(data){
+          var raw = data.split("|");
+          var gesture = {
+            x : parseInt(raw[4]),
+            y : parseInt(raw[5]),
+            z : parseInt(raw[6])
+          }
+
+          socket.emit("gesture", gesture);
+        });
+
+
+      socket.on( 'click', function( data ) {
+      	console.log('click', data);
+          socket.broadcast.emit( 'new click', data );
+      });
 
     // when the user disconnects.. perform this
     socket.on( 'disconnect', function( ) {
     } );
+
+  });
+
 } );
 
 function randomInt(min,max)
