@@ -32,7 +32,7 @@ $( function() {
 			      .attr("cx", data.x+"%")
 			      .attr("cy", 100-data.y+"%")
 			      .attr("r", data.z/12+"%")
-			      .style("stroke", d3.hsl((i = (i + 1) % 360), 1, .5))
+			      .style("stroke", "lime")//d3.hsl((i = (i + 1) % 360), 1, .5))
 			      .style("stroke-opacity", 1)
 			    .transition()
 			      .duration(2000)
