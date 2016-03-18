@@ -12,8 +12,7 @@ var config = require("./config");
 var serialport = require("serialport");
 var SerialPort = serialport.SerialPort;
 
-var ootsidebox = new SerialPort("/dev/ttyACM0", { baudrate: 115200, parser: serialport.parsers.readline("\n") } );
-
+var ootsidebox = new SerialPort("/dev/ttyACM0", { baudrate: 115200, parser: serialport.parsers.readline("\n") }, false ) ;
 
 app.get('/', function(req, res) {
   res.sendfile('public/index.html');
@@ -67,7 +66,10 @@ var AXIS_AVG_MEDIUM = { x: 45, y: 45, z : 150}; // calibrate
 var prevPos = new Array(POS_LENGTH);
 
 function addPrevPos(x, y, z) {
-  prevPos.unshift({x:x, y:y, z:z }); // prepend value to array
+  prevPos.unshift({
+    x:x,
+    y:y,
+    z:z }); // prepend value to array
   prevPos.pop();
   // console.log(prevPos.length == POS_LENGTH); // TODO : assert
 }
@@ -86,123 +88,146 @@ function getDiff(axis) {
   return parseInt(diff)
 }
 
-var vals = []
-ootsidebox.on('open', function(err){
-  console.log('Serial Port Open : Ootsidebox');
 
-  io.on( 'connection', function( socket ) {
-      console.log("connected");
-      sendRawInstructions(); // init raw values
 
+ootsidebox.open(function (error) {
+  if ( error ) {
+    console.log('failed to open: '+error);
+
+    io.on( 'connection', function( socket ) {
       socket.emit('cells', cells)
+    })
 
-      ootsidebox.on('data', function(data, err){
+  } else {
+    console.log('Open serial port');
 
-        var raw = data.split("|");
+    ootsidebox.on('open', function(err){
+      console.log('Serial Port Open : Ootsidebox');
+      io.on( 'connection', function( socket ) {
 
-        if (raw.length == 1) sendRawInstructions(); // make sure the V is sent
+          io.emit('ootsidebox', "connected");
+          
+          var valX = []
+          var valY = []
+          var valZ = []
 
-        var x = parseInt(raw[4]),
-            y = parseInt(raw[5]),
-            z = parseInt(raw[6]),
-            ts = Date.now();
+          console.log("connected");
+          sendRawInstructions(); // init raw values
 
-        addPrevPos(x,y,z);
+          socket.emit('cells', cells)
 
-        // EVENTS
-        var diffX = getDiff("x"),
-          diffY = getDiff("y"),
-          diffZ = getDiff("y");
+          ootsidebox.on('data', function(data, err){
+
+            var raw = data.split("|");
+
+            if (raw.length == 1) sendRawInstructions(); // make sure the V is sent
+
+            var x = parseInt(raw[4]),
+                y = parseInt(raw[5]),
+                z = parseInt(raw[6]),
+                ts = Date.now();
+
+            addPrevPos(x,y,z);
+
+            // EVENTS
+            var diffX = getDiff("x"),
+              diffY = getDiff("y"),
+              diffZ = getDiff("y")*3;
+
+            // if (typeof(diffX) == "number" && !isNaN(diffX)) valX.push(diffX)
+            // if (typeof(diffY) == "number" && !isNaN(diffY)) valY.push(diffY)
+            // if (typeof(diffZ) == "number" && !isNaN(diffZ)) valZ.push(diffZ)
+            //
+            // console.log(
+            //   "x", Math.max.apply(Math, valX), Math.min.apply(Math, valX),
+            //   "y", Math.max.apply(Math, valY), Math.min.apply(Math, valY),
+            //   "z", Math.max.apply(Math, valZ), Math.min.apply(Math, valZ)
+            // );
 
 
-        // check if there is an important difference in any value
-        if (diffX || diffY  || diffZ ) {
+            // check if there is an important difference in any value
+            if ( Math.abs(diffX) < 15 || Math.abs(diffY) > 15 || Math.abs(diffY) > 15 ) {
 
-          // get the biggest difference
-          var axis = ["x", "y", "z"];
-          var maxs = [diffX, diffY, diffZ];
-          var max = Math.max(diffX, diffY, diffZ);
-          console.log(axis[maxs.indexOf(max)]);
-          // console.log(axis[iMax]);
-          // var iMax = [diffX, diffY, diffZ].indexOf(Math.max.apply(Math, [diffX, diffY, diffZ]));
+              // get the biggest difference
+              var axis = ["x", "y", "z"];
+              var maxs = [diffX, diffY, diffZ];
+              var max = Math.max(diffX, diffY, diffZ);
+              // console.log(maxs, max, axis[maxs.indexOf(max)]);
+              // console.log(maxs.indexOf(max), maxs,);
+              console.log(axis[maxs.indexOf(max)],max);
 
-        }
+            }
 
 
-        //
-        //
-        // if(diffZ > 1 && diffZ < -1) console.log(diffZ);
+            //
+            //
+            // if(diffZ > 1 && diffZ < -1) console.log(diffZ);
 
-        var moveEvent = undefined;
+            var moveEvent = undefined;
 
-        // hit event
-        if(diffZ > 6 && diffX < 2  && diffX > -2 && diffY < 2  && diffY > -2 ) moveEvent = "hit";
+            // hit event
+            if(diffZ > 6 && diffX < 2  && diffX > -2 && diffY < 2  && diffY > -2 ) moveEvent = "hit";
 
-        // shake event
-        if(diffZ < 4  && diffZ > -4  &&diffY > 10) moveEvent = "up";
-        // if(diffY > 10) moveEvent ="left";
-        // if(diffY < -10) moveEvent ="right";
+            // shake event
+            if(diffZ < 4  && diffZ > -4  &&diffY > 10) moveEvent = "up";
+            // if(diffY > 10) moveEvent ="left";
+            // if(diffY < -10) moveEvent ="right";
 
-        // if there is a change, record new event
-        if(moveEvent && !currentEvent ) {
-          moveEventTime = ts;
-          currentEvent = moveEvent;
-        }
+            // if there is a change, record new event
+            if(moveEvent && !currentEvent ) {
+              moveEventTime = ts;
+              currentEvent = moveEvent;
+            }
 
-        // keep the event alive for 1s
-        if(ts < (moveEventTime+1000) ) {
-          if(!eventSent) {
-            console.log(moveEvent);
-            socket.emit(moveEvent, "gesture");
-            eventSent = true;
-          }
-        } else {
-          currentEvent = null;
-          eventSent = false;
-        }
+            // keep the event alive for 1s
+            if(ts < (moveEventTime+1000) ) {
+              if(!eventSent) {
+                console.log(moveEvent);
+                socket.emit(moveEvent, "gesture");
+                eventSent = true;
+              }
+            } else {
+              currentEvent = null;
+              eventSent = false;
+            }
 
-        //
-        if ( diffZ < 2 && diffY < 2 && diffX < 2)
-          ootsideboxActive = false;
-        else
-          ootsideboxActive = true;
+            //
+            if ( diffZ < 2 && diffY < 2 && diffX < 2)
+              ootsideboxActive = false;
+            else
+              ootsideboxActive = true;
 
-        var gesture = {
-          x : x,
-          y : y,
-          z : z,
-          active: ootsideboxActive,
-          ts : ts
-        }
+            var gesture = {
+              x : x,
+              y : y,
+              z : z,
+              active: ootsideboxActive,
+              ts : ts
+            }
 
-        socket.emit("gesture", gesture);
-        prevGest = gesture;
+            socket.emit("gesture", gesture);
+            prevGest = gesture;
+
+          });
+
+
+          socket.on( 'click', function( data ) {
+          	   console.log('click', data);
+              socket.broadcast.emit( 'new click', data );
+          });
+
+        // when the user disconnects.. perform this
+        socket.on( 'disconnect', function( ) {
+        } );
 
       });
 
-
-      socket.on( 'click', function( data ) {
-      	   console.log('click', data);
-          socket.broadcast.emit( 'new click', data );
-      });
-
-    // when the user disconnects.. perform this
-    socket.on( 'disconnect', function( ) {
     } );
+  }
+});
 
-  });
-
-} );
 
 function randomInt(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
-
-Array.prototype.max = function() {
-  return Math.max.apply(Math, this);
-};
-
-Array.prototype.min = function() {
-  return Math.min.apply(Math, this);
-};

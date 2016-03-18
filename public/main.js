@@ -97,6 +97,12 @@ return x1 > nx2
 }
 
 
+d3.select(window)
+  .on("mousemove", function(d){
+			x = d3.event.screenX;
+			y = d3.event.screenY;
+			console.log( d3.event);
+	})
 
 socket.on( 'gesture', function(data){
 	// console.log(data);
