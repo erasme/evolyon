@@ -4,3 +4,9 @@ body{
 	background: #000;
 	color: white
 }
+
+
+circle {
+  fill: none;
+  stroke-width: 2.5px;
+}
