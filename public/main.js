@@ -97,11 +97,14 @@ return x1 > nx2
 }
 
 
-d3.select(window)
+d3.select("canvas")
   .on("mousemove", function(d){
-			x = d3.event.screenX;
-			y = d3.event.screenY;
-			console.log( d3.event);
+
+			// convert x and y on a range from 0 to 100
+			x = (d3.mouse(this)[0]/w)*100;
+			y = (d3.mouse(this)[1]/h)*100;
+
+			console.log(x,y);
 	})
 
 socket.on( 'gesture', function(data){
