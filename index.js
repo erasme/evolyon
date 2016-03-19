@@ -18,16 +18,9 @@ app.get('/', function(req, res) {
   res.sendfile('public/index.html');
 })
 
-app.get('/touchscreen', function(req, res) {
-  res.send('Touchscreen');
-})
-
-app.get('/videoproj', function(req, res){
-  res.send('Videoproj');
-})
-
 app.get('/single/:id', function(req,res){
-  res.send('cell ' + req.params.id);
+  // res.send('cell ' + req.params.id);
+  res.sendfile('public/single.html');
 });
 
 server.listen( port, function( ) {
@@ -40,17 +33,32 @@ app.use( express.static( __dirname + '/public' ) );
 var NB_CELLS = 45;
 
 var cells = Array.apply(null, Array(NB_CELLS)).map(function(d,i){
-  return {x : randomInt(0, 600), y : randomInt(0,600), easing: randomInt(1,100)/100, delay: randomInt(50, 300) }
+  return {
+    x : randomInt(0, 600),
+    y : randomInt(0,600),
+    easing: randomInt(1,100)/100,
+    delay: randomInt(50, 300)
+  }
 })
 
-// console.log(cells);
 
+
+/*
+* Events for Ootsidebox
+*/
 var prevGest= {x:0, y:0, z:0, ts: Date.now()};
 var ootsideboxActive = false;
 var moveEventTime = null;
 var currentEvent = null;
 var eventSent = false;
 
+// detect average position
+var POS_LENGTH = 10
+var AXIS_AVG_MEDIUM = { x: 45, y: 45, z : 150}; // calibrate
+var prevPos = new Array(POS_LENGTH);
+
+
+// tell OootsideBox to send raw values instead of pre-calculated events
 function sendRawInstructions() {
   ootsidebox.write("V", function(err, results) {
     if (err) console.log('err ' + err);
@@ -58,64 +66,54 @@ function sendRawInstructions() {
   });
 }
 
-
-var POS_LENGTH = 10
-var AXIS_AVG_MEDIUM = { x: 45, y: 45, z : 150}; // calibrate
-
-
-var prevPos = new Array(POS_LENGTH);
-
+// store coordinates in an array
 function addPrevPos(x, y, z) {
   prevPos.unshift({
     x:x,
     y:y,
     z:z }); // prepend value to array
   prevPos.pop();
-  // console.log(prevPos.length == POS_LENGTH); // TODO : assert
 }
 
+// get average difference on the array of values for one axis
 function getDiff(axis) {
-
   var values = prevPos.map(function(d) { return d[axis] });
-
   var sum = values.reduce(function(a, b) { return a + b; });
   var avg = sum / values.length;
-
-  var diff = values.reduce(function(a, b) {
-    return avg*2 - (a+b);
-  });
-
+  var diff = values.reduce(function(a, b) { return avg*2 - (a+b); });
   return parseInt(diff)
 }
 
 
-
+// try to connect to the ootside box
 ootsidebox.open(function (error) {
+  // check if connection works
   if ( error ) {
     console.log('No Ootsidebox connected on: '+error);
-
     io.on( 'connection', function( socket ) {
       socket.emit('cells', cells)
     })
-
   } else {
     console.log('Open serial port');
 
     ootsidebox.on('open', function(err){
-      console.log('Serial Port Open : Ootsidebox');
+      console.log('Opening Serial Port : Ootsidebox');
       io.on( 'connection', function( socket ) {
 
+          console.log("OotsideBox connected");
           io.emit('ootsidebox', "connected");
 
           var valX = []
           var valY = []
           var valZ = []
 
-          console.log("connected");
-          sendRawInstructions(); // init raw values
+          // tell OootsideBox to send raw values instead of pre-calculated events
+          sendRawInstructions();
 
+          // send cells infomation
           socket.emit('cells', cells)
 
+          // parse raw data
           ootsidebox.on('data', function(data, err){
 
             var raw = data.split("|");
@@ -134,42 +132,26 @@ ootsidebox.open(function (error) {
               diffY = getDiff("y"),
               diffZ = getDiff("y")*3;
 
-            // if (typeof(diffX) == "number" && !isNaN(diffX)) valX.push(diffX)
-            // if (typeof(diffY) == "number" && !isNaN(diffY)) valY.push(diffY)
-            // if (typeof(diffZ) == "number" && !isNaN(diffZ)) valZ.push(diffZ)
-            //
-            // console.log(
-            //   "x", Math.max.apply(Math, valX), Math.min.apply(Math, valX),
-            //   "y", Math.max.apply(Math, valY), Math.min.apply(Math, valY),
-            //   "z", Math.max.apply(Math, valZ), Math.min.apply(Math, valZ)
-            // );
-
 
             // check if there is an important difference in any value
+            // TODO : check range properly
             if ( Math.abs(diffX) < 15 || Math.abs(diffY) > 15 || Math.abs(diffY) > 15 ) {
-
               // get the biggest difference
               var axis = ["x", "y", "z"];
               var maxs = [diffX, diffY, diffZ];
               var max = Math.max(diffX, diffY, diffZ);
-              // console.log(maxs, max, axis[maxs.indexOf(max)]);
-              // console.log(maxs.indexOf(max), maxs,);
               console.log(axis[maxs.indexOf(max)],max);
-
             }
 
-
-            //
-            //
-            // if(diffZ > 1 && diffZ < -1) console.log(diffZ);
-
+            // parse events
             var moveEvent = undefined;
 
             // hit event
             if(diffZ > 6 && diffX < 2  && diffX > -2 && diffY < 2  && diffY > -2 ) moveEvent = "hit";
 
             // shake event
-            if(diffZ < 4  && diffZ > -4  &&diffY > 10) moveEvent = "up";
+
+            // if(diffZ < 4  && diffZ > -4  &&diffY > 10) moveEvent = "up";
             // if(diffY > 10) moveEvent ="left";
             // if(diffY < -10) moveEvent ="right";
 
@@ -210,15 +192,10 @@ ootsidebox.open(function (error) {
 
           });
 
-
-          socket.on( 'click', function( data ) {
-          	   console.log('click', data);
-              socket.broadcast.emit( 'new click', data );
-          });
-
         // when the user disconnects.. perform this
         socket.on( 'disconnect', function( ) {
-        } );
+          console.log("bye !");
+        });
 
       });
 
