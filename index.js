@@ -12,7 +12,7 @@ var config = require("./config");
 var serialport = require("serialport");
 var SerialPort = serialport.SerialPort;
 
-var ootsidebox = new SerialPort("/dev/ttyACM0", { baudrate: 115200, parser: serialport.parsers.readline("\n") }, false ) ;
+var ootsidebox = new SerialPort(config.serial, { baudrate: 115200, parser: serialport.parsers.readline("\n") }, false ) ;
 
 app.get('/', function(req, res) {
   res.sendfile('public/index.html');
@@ -92,7 +92,7 @@ function getDiff(axis) {
 
 ootsidebox.open(function (error) {
   if ( error ) {
-    console.log('failed to open: '+error);
+    console.log('No Ootsidebox connected on: '+error);
 
     io.on( 'connection', function( socket ) {
       socket.emit('cells', cells)
@@ -106,7 +106,7 @@ ootsidebox.open(function (error) {
       io.on( 'connection', function( socket ) {
 
           io.emit('ootsidebox', "connected");
-          
+
           var valX = []
           var valY = []
           var valZ = []
