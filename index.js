@@ -142,8 +142,10 @@ ootsidebox.open( function( error ) {
 } );
 
 
-
+var prevTime = Date.now();
 io.on( 'connection', function( socket ) {
+
+  console.log("socket connected");
 
 	// send cells infomation
 	socket.emit( 'cells', cells );
@@ -181,15 +183,19 @@ io.on( 'connection', function( socket ) {
 		}
 		else if( prevActive && active ){
 			// send mouse moved
-			console.log('mouseMoved');
-			socket.emit( 'mouseMoved', normedGesture );
+      // console.log(Date.now()- prevTime);
+      if(Date.now()- prevTime > 100) {
+  			console.log('mouseMoved');
+        socket.emit( 'mouseMoved', normedGesture );
+        prevTime = Date.now();
+      }
 		}
 		else if( prevActive && !active ){
 			// send mouse up
 			console.log('mouseUp');
 			socket.emit( 'mouseUp', normedGesture );
 		}
-		
+
 		prevActive = active;
 		prevGest = gesture;
 	} );
