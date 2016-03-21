@@ -42,7 +42,7 @@ var cells = Array.apply( null, Array( NB_CELLS ) ).map( function( d, i ) {
 	return {
 		x: randomInt( 0, 600 ),
 		y: randomInt( 0, 600 ),
-		easing: randomInt( 1, 100 ) / 100,
+		easing: Math.random() / 50,
 		delay: randomInt( 50, 300 )
 	}
 } );
@@ -166,10 +166,16 @@ io.on( 'connection', function( socket ) {
 		var active = ( gesture.z < 150 );
 		updateMinMax( gesture );
 
-		var normedGesture = {
+		/*var normedGesture = {
 			x: map( getAverage('x'), minX, maxX, 0, 1 ),
 			y: map( getAverage('y'), minY, maxY, 0, 1 ),
 			z: map( getAverage('z'), minZ, maxZ, 0, 1 )
+		};*/
+
+		var normedGesture = {
+			x: map( gesture.x, minX, maxX, 0, 1 ),
+			y: map( gesture.y, minY, maxY, 0, 1 ),
+			z: map( gesture.z, minZ, maxZ, 0, 1 )
 		};
 
 		// console.log(normedGesture);
