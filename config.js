@@ -1,4 +1,4 @@
 module.exports = {
   // serial : "/dev/ttyACM0" 
-  serial : "COM7" 
+  serial : "COM5" 
 };
