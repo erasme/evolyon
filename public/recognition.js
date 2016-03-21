@@ -1,73 +1,3 @@
-// var body = document.querySelector( 'body' );
-document.body.style.height = window.innerHeight + 'px';
-
-// size of the abribus
-var abribus = {
-    "height": 120,
-    "width": 176
-};
-
-var h = window.innerHeight - 50;
-var w = ( 120 / 176 ) * h;
-
-var x = 0, minX = 999, maxX = -999, diffX = 0,
-    y = 0, minY = 999, maxY = -999, diffY = 0,
-    z = 0, minZ = 999, maxZ = -999, diffZ = 0;
-
-
-var cells = [];
-
-// mouse events for web version
-d3.select( "canvas" )
-    .on( "mousemove", function( d ) {
-
-        // convert x and y on a range from 0 to 100
-        x = ( d3.mouse( this )[ 0 ] / w ) * 100;
-        y = ( d3.mouse( this )[ 1 ] / h ) * 100;
-
-        // console.log( x, y );
-    } );
-
-
-var socket = io();
-socket.emit( 'join', ~~( Math.random() * 10 ) );
-
-socket.on( 'cells', function( data ) {
-    cells = data;
-} );
-
-socket.on( 'gesture', function( data ) {
-    // console.log(data);
-	diffX = data.x - x;
-    x = data.x;
-    minX = Math.min( minX, data.x );
-    maxX = Math.max( maxX, data.x );
-
-	diffY = data.y - y;
-    y = data.y;
-    minY = Math.min( minY, data.x );
-    maxY = Math.max( maxY, data.x );
-
-	diffZ = data.z - z;
-    z = data.z;
-    minZ = Math.min( minZ, data.x );
-    maxZ = Math.max( maxZ, data.x );
-} );
-
-socket.on( 'hit', function( data ) {
-    console.log( "hit" );
-} )
-
-socket.on( 'swipe', function( data ) {
-    console.log( "swipe" );
-} )
-
-socket.on( 'shake', function( data ) {
-    console.log( "shake" );
-} )
-
-
-/////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
 
 
@@ -118,8 +48,10 @@ function getScrollY() {
     }
     return scrollY;
 }
-
+//
 // Mouse Events
+//
+
 function mouseDownEvent( x, y ) {
     document.onselectstart = function() {
         return false;
@@ -183,35 +115,38 @@ function drawConnectedPoint( from, to ) {
 }
 
 // round 'n' to 'd' decimals
+
 function round( n, d ) {
     d = Math.pow( 10, d );
     return Math.round( n * d ) / d
 }
 
-/* // Unistroke Adding and Clearing
-	function onClickAddExisting() {
-	    if ( _points.length >= 10 ) {
-	        var unistrokes = document.getElementById( 'unistrokes' );
-	        var name = unistrokes[ unistrokes.selectedIndex ].value;
-	        var num = _r.AddGesture( name, _points );
-	        drawText( "\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + "." );
-	    }
-	}
+//
+// Unistroke Adding and Clearing
+//
 
-	function onClickAddCustom() {
-	    var name = document.getElementById( 'custom' ).value;
-	    if ( _points.length >= 10 && name.length > 0 ) {
-	        var num = _r.AddGesture( name, _points );
-	        drawText( "\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + "." );
-	    }
-	}
+function onClickAddExisting() {
+    if ( _points.length >= 10 ) {
+        var unistrokes = document.getElementById( 'unistrokes' );
+        var name = unistrokes[ unistrokes.selectedIndex ].value;
+        var num = _r.AddGesture( name, _points );
+        drawText( "\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + "." );
+    }
+}
 
-	function onClickCustom() {
-	    document.getElementById( 'custom' ).select();
-	}
+function onClickAddCustom() {
+    var name = document.getElementById( 'custom' ).value;
+    if ( _points.length >= 10 && name.length > 0 ) {
+        var num = _r.AddGesture( name, _points );
+        drawText( "\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + "." );
+    }
+}
 
-	function onClickDelete() {
-	    var num = _r.DeleteUserGestures(); // deletes any user-defined unistrokes
-	    alert( "All user-defined gestures have been deleted. Only the 1 predefined gesture remains for each of the " + num + " types." );
-	}
-*/
+function onClickCustom() {
+    document.getElementById( 'custom' ).select();
+}
+
+function onClickDelete() {
+    var num = _r.DeleteUserGestures(); // deletes any user-defined unistrokes
+    alert( "All user-defined gestures have been deleted. Only the 1 predefined gesture remains for each of the " + num + " types." );
+}
