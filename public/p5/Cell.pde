@@ -1,52 +1,26 @@
-Polygon[] polygonArray = new Polygon[300];
-
-void setup() {
-  size(500, 500);
-  noFill();
-
-  stroke(#a184b7);
-  strokeWeight(2);
-  strokeJoin(ROUND);
-  strokeCap(ROUND);
-
-  smooth();
-
-  for (int i=0; i<polygonArray.length; i++) {
-    polygonArray[i] = new Polygon(width/2, height/2, 3, 50, -90, sin(frameCount/40.)*0.2+1);
-  }
-}
-
-void draw() {
-  background(0);
-
-  for (int i=0; i<polygonArray.length; i++) {
-    polygonArray[i].move();
-  }
-}
-
-class Polygon {
+class Cell {
 
   int centreX;
-  int centreY; 
+  int centreY;
   int trajectoireX;
   int trajectoireY;
-  int nbCotes; 
+  int nbCotes;
   int rayon;
-  float angle; 
+  float angle;
   float amplitude;
   int delay;
 
-  Polygon(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
+  Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
     centreX = centreX_;
-    centreY = centreY_; 
-    nbCotes = nbCotes_; 
+    centreY = centreY_;
+    nbCotes = nbCotes_;
     rayon = rayon_;
-    angle = angle_; 
+    angle = angle_;
     amplitude = amplitude_;
-    
+
     delay = int(random(5,100));
   }
-  
+
   void move() {
 
     if ( frameCount % delay  == 0 ) {
@@ -59,7 +33,7 @@ class Polygon {
 
     draw();
   }
-  
+
   int ease(int value, int target, float easingVal) {
     int d = target - value;
     if (abs(d)>1) value+= d*easingVal;
@@ -96,7 +70,3 @@ class Polygon {
     endShape(CLOSE);
   }
 }
-
-void mousePressed() {
-}
-

@@ -16,6 +16,7 @@ var cells = [];
 var socket = io();
 
 socket.on( 'cells', function( data ) {
+    console.log("new cells");
     cells = data;
 } );
 
@@ -27,6 +28,10 @@ function updateGesture( data ){
 
 socket.on( 'connect', function(data) {
   console.log("connected to socket");
+})
+
+socket.on( 'ha', function(data) {
+  console.log("haha");
 })
 
 socket.on( 'mouseDown', function( data ){

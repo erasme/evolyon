@@ -143,6 +143,9 @@ ootsidebox.open( function( error ) {
 
 
 var prevTime = Date.now();
+var prevEvent = null;
+var minTimeDiffBetweenEvents = 50;
+
 io.on( 'connection', function( socket ) {
 
   console.log("socket connected");
@@ -175,27 +178,29 @@ io.on( 'connection', function( socket ) {
 		};
 
 		// console.log(normedGesture);
-
-		if( active && !prevActive ){
-			// send mouse down
-			console.log('mouseDown');
-			socket.emit( 'mouseDown', normedGesture );
+    var currentEvent = null;
+    if( active && !prevActive ){
+      currentEvent = 'mouseDown';
 		}
 		else if( prevActive && active ){
-			// send mouse moved
-      // console.log(Date.now()- prevTime);
-      if(Date.now()- prevTime > 100) {
-  			console.log('mouseMoved');
-        socket.emit( 'mouseMoved', normedGesture );
-        prevTime = Date.now();
-      }
+      currentEvent = 'mouseMoved';
 		}
 		else if( prevActive && !active ){
-			// send mouse up
-			console.log('mouseUp');
-			socket.emit( 'mouseUp', normedGesture );
+      currentEvent = 'mouseUp';
 		}
 
+
+    // emit if event has changed
+    if(currentEvent && (currentEvent != prevEvent)) {
+      socket.emit( currentEvent, normedGesture );
+      console.log(currentEvent);
+    } else if ( currentEvent && Date.now() - prevTime > minTimeDiffBetweenEvents) {
+      socket.emit( currentEvent, normedGesture );
+      console.log(currentEvent);
+      prevTime = Date.now();
+    }
+
+    prevEvent = currentEvent;
 		prevActive = active;
 		prevGest = gesture;
 	} );
