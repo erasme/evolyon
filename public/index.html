@@ -16,15 +16,14 @@
  -->
     <canvas data-processing-sources="/p5/cell.pde"></canvas>
 
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+    <script src="/processing.js"></script>
+    <script src="/d3.js" charset="utf-8"></script>
     <script src="/client.js"></script>
 	<script src="/dollar.js"></script>
 
 	
-	<canvas id="myCanvas" width="420" height="400" style="background-color:#dddddd" onmousedown="mouseDownEvent(event.clientX, event.clientY)" onmousemove="mouseMoveEvent(event.clientX, event.clientY)" onmouseup="mouseUpEvent(event.clientX, event.clientY)" oncontextmenu="return false;"></canvas>
+	<canvas id="myCanvas" width="420" height="400" style="background-color:#dddddd" onmousedown="mouseDownEvent(event.clientX, event.clientY)" onmousemove="mouseMovedEvent(event.clientX, event.clientY)" onmouseup="mouseUpEvent(event.clientX, event.clientY)" oncontextmenu="return false;"></canvas>
 
 </body>
 

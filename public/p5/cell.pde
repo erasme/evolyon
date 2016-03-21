@@ -10,16 +10,15 @@ void setup() {
 void draw() {
 	background(0);
 
-	cells.forEach( function( d ){
+	/*cells.forEach( function( d ){
 		if( d.delay % frameCount == 0 ){
-			console.log( "move" );
 			d.dx = int(random( w ));
 			d.dy = int(random( h ));
 		}
-	} );
+	} );*/
 
-	var ootX = map(x, 0, 100, 0, w);
-	var ootY = map(y, 0, 100, 0, h);
+	var ootX = gesture.x * w;
+	var ootY = gesture.y * h;
 
 	// console.log(ootX,ootY);
 
@@ -35,11 +34,11 @@ void draw() {
 			&& ootY+50 > cells[i].y
 			&& ootY-50 < cells[i].y
 		){
-			stroke(#a184b7, map(z, 0, 300, 255, 100) );
-			strokeWeight(map(z, 0, 300, 10, 1 ));
+			stroke(#a184b7, map(gesture.z, 0, 300, 255, 100) );
+			strokeWeight(map(gesture.z, 0, 300, 10, 1 ));
 
-			nbCotes = int(map(z, 0, 300, 15,3));
-			r = int(map(z, 0, 300, 100, 40));
+			nbCotes = int(map(gesture.z, 0, 300, 15,3));
+			r = int(map(gesture.z, 0, 300, 100, 40));
 		}
 		else {
 			stroke(#a184b7, 100 );
