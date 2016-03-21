@@ -68,6 +68,7 @@ var eventSent = false;
 
 var POS_LENGTH = 10;
 var prevPos = new Array( POS_LENGTH );
+
 // detect average position
 var AXIS_AVG_MEDIUM = {
     x: 45,
@@ -188,10 +189,10 @@ ootsidebox.open( function( error ) {
                 }
 
                 //
-                if ( diffZ < 2 && diffY < 2 && diffX < 2 )
-                    ootsideboxActive = false;
-                else
+                if ( diffZ > 2 || diffY > 2 || diffX > 2 )
                     ootsideboxActive = true;
+                else
+                    ootsideboxActive = false;
 
                 var gesture = {
                     x: x,
@@ -199,7 +200,7 @@ ootsidebox.open( function( error ) {
                     z: z,
                     active: ootsideboxActive,
                     ts: ts
-                }
+                };
 
                 socket.emit( "gesture", gesture );
                 prevGest = gesture;

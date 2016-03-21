@@ -10,27 +10,33 @@ var abribus = {
 var h = window.innerHeight - 50;
 var w = ( 120 / 176 ) * h;
 
-var x = 0, minX = 999, maxX = -999, diffX = 0,
-    y = 0, minY = 999, maxY = -999, diffY = 0,
-    z = 0, minZ = 999, maxZ = -999, diffZ = 0;
-
+var x = 0,
+    minX = 999,
+    maxX = -999,
+    diffX = 0,
+    y = 0,
+    minY = 999,
+    maxY = -999,
+    diffY = 0,
+    z = 0,
+    minZ = 999,
+    maxZ = -999,
+    diffZ = 0,
+    prevGesture = {active:false};
 
 var cells = [];
 
 // mouse events for web version
 d3.select( "canvas" )
     .on( "mousemove", function( d ) {
-
         // convert x and y on a range from 0 to 100
         x = ( d3.mouse( this )[ 0 ] / w ) * 100;
         y = ( d3.mouse( this )[ 1 ] / h ) * 100;
-
         // console.log( x, y );
     } );
 
-
 var socket = io();
-socket.emit( 'join', ~~( Math.random() * 10 ) );
+socket.emit( 'join', ~~ ( Math.random() * 10 ) );
 
 socket.on( 'cells', function( data ) {
     cells = data;
@@ -38,44 +44,66 @@ socket.on( 'cells', function( data ) {
 
 socket.on( 'gesture', function( data ) {
     // console.log(data);
-	diffX = data.x - x;
+    diffX = data.x - x;
     x = data.x;
     minX = Math.min( minX, data.x );
     maxX = Math.max( maxX, data.x );
 
-	diffY = data.y - y;
+    diffY = data.y - y;
     y = data.y;
     minY = Math.min( minY, data.x );
     maxY = Math.max( maxY, data.x );
 
-	diffZ = data.z - z;
+    diffZ = data.z - z;
     z = data.z;
     minZ = Math.min( minZ, data.x );
     maxZ = Math.max( maxZ, data.x );
+
+    if ( data.active && !prevGesture.active ) {
+    	mouseDownEvent( 
+    		~~map( x, minX, maxX, 0, canvas.width ),
+    		~~map( y, minY, maxY, canvas.height, 0 )
+		);
+    }
+    else if( data.active ){
+    	mouseMoveEvent( 
+    		~~map( x, minX, maxX, 0, canvas.width ),
+    		~~map( y, minY, maxY, canvas.height, 0 )
+		);
+    }
+    else if( prevGesture.active && !data.active ){
+    	mouseUpEvent( 
+    		~~map( x, minX, maxX, 0, canvas.width ),
+    		~~map( y, minY, maxY, canvas.height, 0 )
+		);
+    }
+    prevGesture = data;
 } );
 
 socket.on( 'hit', function( data ) {
     console.log( "hit" );
-} )
+} );
 
 socket.on( 'swipe', function( data ) {
     console.log( "swipe" );
-} )
+} );
 
 socket.on( 'shake', function( data ) {
     console.log( "shake" );
-} )
+} );
 
-
+var map = function( n, start1, stop1, start2, stop2 ) {
+    return ( ( n - start1 ) / ( stop1 - start1 ) ) * ( stop2 - start2 ) + start2;
+};
 /////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
-
+var canvas;
 
 function onLoadEvent() {
     _points = new Array();
     _r = new DollarRecognizer();
 
-    var canvas = document.getElementById( 'myCanvas' );
+	canvas = document.getElementById( 'myCanvas' );
     _g = canvas.getContext( '2d' );
     _g.fillStyle = "rgb(0,0,225)";
     _g.strokeStyle = "rgb(0,0,225)";
@@ -120,6 +148,7 @@ function getScrollY() {
 }
 
 // Mouse Events
+
 function mouseDownEvent( x, y ) {
     document.onselectstart = function() {
         return false;
@@ -129,7 +158,7 @@ function mouseDownEvent( x, y ) {
     } // disable drag-select
     _isDown = true;
     x -= _rc.x;
-    y -= _rc.y - getScrollY();
+    y -= _rc.y;// - getScrollY();
     if ( _points.length > 0 )
         _g.clearRect( 0, 0, _rc.width, _rc.height );
     _points.length = 1; // clear
@@ -183,6 +212,7 @@ function drawConnectedPoint( from, to ) {
 }
 
 // round 'n' to 'd' decimals
+
 function round( n, d ) {
     d = Math.pow( 10, d );
     return Math.round( n * d ) / d
