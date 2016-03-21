@@ -1,14 +1,69 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Evolyon</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1"> 
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" type="text/css" href="style_single.css">
+	<title>evolyon</title>
 </head>
 
 <body>
-  <h1>Cellule</h1>
+	
+	<div id="container">
+		<img src="logo.svg" id="logo">
+		<div class="chargement hidden"><img src="chargement.gif"></div>
+			<div id="btnActivate">
+				<p>Attire <br>une particule <br> dans ton téléphone</p>
+			</div>
+		<script type="text/javascript" src="processing.min.js"></script>
+		<!--<canvas id="particle" class="hidden" data-processing-sources="Shapes_3/Triangle.pde Shapes_3/Shapes_3.pde"></canvas>-->
+		
+		<div id="particle" class="hidden"></div>
+		
+		<div id="debug">
+  		<a href="javascript:window.location.href=window.location.href">RELOAD</a>
+		</div>
+		
+	</div>
 
-  <p>Page pour afficher une seule cellule (doit marcher sur mobile).</p>
-</body
+	
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+	<script type="text/javascript" src="p5.js"></script>
+	<script type="text/javascript" src="Triangle.js"></script>
+	<script type="text/javascript" src="NomNom.js"></script>
+	<script type="text/javascript" src="Shapes_3.js"></script>
+	<script type="text/javascript" src="hammer.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			//	$(document).bind('touchmove', false);
+
+				console.log("ready");
+					var hammertime = new Hammer(btnActivate);/* variable pour créer une action au bout de 3 secondes de touch"*/
+					var hammertime2 = new Hammer(btnActivate);/* variable pour détecter le touch*/
+					hammertime.get('press').set({
+						time : 4000,
+						pointers : 1,
+						threshold : 10
+					});/* options pour le touch dont la variable est var hammertime*/
+					hammertime2.on("press",function(ev){
+						$(".chargement").removeClass('hidden');
+					});/* je touche donc j'enlève a classe hidden pour dévoiler le gif*/
+					hammertime2.on("pressup", function(ev) {
+						$(".chargement").addClass('hidden');
+					});/* je touche plus donc je cache le chargement*/
+					hammertime.on("press", function(ev) {
+						$("#btnActivate").remove();
+						$("#particle").removeClass('hidden');
+					});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
+					 });
+	</script>	
+</body>
+</html>
