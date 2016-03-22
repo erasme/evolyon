@@ -131,7 +131,6 @@ void newSquare() {
   cells.add(c);
 }
 
-
 void split(){
   cells.add( getNewCell() );
 }
