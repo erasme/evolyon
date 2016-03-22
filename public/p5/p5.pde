@@ -1,4 +1,4 @@
-int NB_CELLS = 10; // init cell numbers
+int NB_CELLS = 30; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 
 void setup() {
@@ -18,7 +18,7 @@ Cell getNewCell() {
 
   Cell c = new Cell();
   int cellType = int(random(3));
-  println(cellType);
+
   switch(cellType) {
     case 0 :
       c = new Triangle(x, y);
@@ -32,7 +32,6 @@ Cell getNewCell() {
   }
 
   return c;
-
 
 }
 
