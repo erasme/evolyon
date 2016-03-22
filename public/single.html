@@ -58,13 +58,23 @@
 			});
 
 
+			socket.on( 'newCell', function( data ){
+				console.log("display cell");
+				$("#btnActivate").remove();
+				$("#particle").removeClass('hidden');
+
+				var pjs = Processing.getInstanceById("cells");
+			  start();
+
+			});
+
 			var touchZone = document.getElementsByTagName('html')[0];
 
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
 			hammertime2.on("press",function(ev){
         console.log("j'ai appuyé");
 			});
-			
+
 			hammertime2.on("pressup", function(ev) {
 					console.log("pressUp")
 					socket.emit( 'phoneReady');
@@ -78,15 +88,13 @@
 				threshold : 10
 			});/* options pour le touch dont la variable est var hammertime*/
 
-			hammertime.on("press", function(ev) {
-				$("#btnActivate").remove();
-				$("#particle").removeClass('hidden');
-
-
-			});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
+			// hammertime.on("press", function(ev) {
+			//
+			//
+			// });/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
 
 		});
 	</script>
-	
+
 </body>
 </html>
