@@ -1,4 +1,4 @@
-Cell[] polygonArray = new Cell[1];
+Cell[] polygonArray = new Cell[10];
 
 void setup() {
   size(500, 500);
@@ -24,6 +24,26 @@ void draw() {
   }
 }
 
+boolean dropped = false;
+void sleepAwakeAll() {
+  if (dropped) {
+    for (int i=0; i<polygonArray.length; i++) {
+      polygonArray[i].drop();
+    }
+    dropped = false;
+  } else  {
+    for (int i=0; i<polygonArray.length; i++) {
+      polygonArray[i].raise();
+    }
+    dropped = true;
+  }
+}
 
-void mousePressed() {
+
+void keyPressed() {
+  if (key == 'a') {
+    sleepAwakeAll();
+  } else if (key == 'z') {
+    polygonArray[0].kick();
+  }
 }

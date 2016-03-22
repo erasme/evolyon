@@ -4,23 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Evolyon</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <h1>Evolyon</h1>
 
-    <!-- <div id="visual">
-
-    </div>
- -->
-    <canvas data-processing-sources="/p5/p5.pde"></canvas>
+    <canvas data-processing-sources="/p5/Cell.pde /p5/p5.pde"></canvas>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/processing.js"></script>
-    <script src="/d3.js" charset="utf-8"></script>
-    <script src="/client.js"></script>
-	<script src="/dollar.js"></script>
+    <script src="/lib/processing.js"></script>
+    <script src="/lib/d3.js" charset="utf-8"></script>
+	  <script src="/lib/dollar.js"></script>
+    <script src="/js/client.js"></script>
 
 
 	<canvas id="myCanvas" width="420" height="400" style="background-color:#dddddd" onmousedown="mouseDownEvent(event.clientX, event.clientY)" onmousemove="mouseMovedEvent(event.clientX, event.clientY)" onmouseup="mouseUpEvent(event.clientX, event.clientY)" oncontextmenu="return false;"></canvas>
