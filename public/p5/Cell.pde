@@ -10,20 +10,32 @@ class Cell {
   float amplitude;
   int delay;
   boolean dropped;
+
   float easing;
+  float cellEasing; // backup the values
+
+  int cellRayon;
+  boolean appearing;
 
 
   Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
     centreX = centreX_;
     centreY = centreY_;
     nbCotes = nbCotes_;
-    rayon = rayon_;
+    rayon = 1;
     angle = angle_;
     amplitude = amplitude_;
 
-    easing = 0.05;
+    cellRayon = rayon_;
+
+    cellEasing = random(0, 0.05);
+    easing = cellEasing;
+
     delay = int(random(5,100));
     dropped = false;
+
+    // init creation
+    appearing = true;
 
   }
 
@@ -36,8 +48,17 @@ class Cell {
   }
 
   boolean kicked = false;
+  int originKicked;
+  int kickDuration = 150;
+
   void kick() {
-      kicked = true;
+    originKicked = frameCount;
+    kicked = true;
+  }
+
+  boolean disappearing = false;
+  void disappear() {
+    disappearing = true;
   }
 
   void move() {
@@ -45,28 +66,44 @@ class Cell {
     if( dropped == true ){
       trajectoireX = centreX;
       if ( frameCount % delay  == 0 ) {
-
-        trajectoireY = int( random(height-rayon-50, height) );
-
+        trajectoireY = int( random(height-rayon, height) );
       }
     } else if ( frameCount % delay  == 0 ) {
       trajectoireX = int(random (rayon, width-rayon));
       trajectoireY = int(random (rayon, height-rayon));
     }
 
-    int originKicked;
 
     if (kicked) {
       easing = .3;
-      originKicked = frameCount;
-      if( frameCount - originKicked == 10) {
-        easing = .03;
+
+      // println(frameCount - originKicked, originKicked);
+      if( frameCount - originKicked == kickDuration) {
+        easing = cellEasing;
+        kicked = false;
       }
 
     }
 
-    centreX  = ease(centreX, trajectoireX, easing );
-    centreY = ease(centreY, trajectoireY, easing);
+    if (disappearing) {
+      rayon--;
+    }
+
+    if (!disappearing && (rayon < cellRayon)) {
+      rayon++;
+      appearing = true;
+    } else  {
+      appearing = false;
+    }
+
+    if(disappearing || appearing) {
+
+    } else  {
+      centreX  = ease(centreX, trajectoireX, easing );
+      centreY = ease(centreY, trajectoireY, easing);
+    }
+
+
 
     draw();
   }
