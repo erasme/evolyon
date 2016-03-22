@@ -8,12 +8,14 @@ class Cell {
     float targetY;
     int nbCotes;
     int rayon;
-    float angle;
+    float angle, tarAngle = 0;
     float amplitude;
+    color couleur;
     int delay;
 
     boolean dropped;
     boolean selected = false;
+    int selectedTime = 0;
 
     float easing;
     float cellEasing; // backup the values
@@ -23,7 +25,6 @@ class Cell {
 
     boolean isHit = true;
 
-    color couleur;
 
     Cell() {
         // empty
@@ -84,43 +85,67 @@ class Cell {
     }
 
     void move() {
-        if ( dropped == true ) {
-            targetY = int( random(height-rayon, height) );
-        } else if ( frameCount % delay  == 0 ) {
-            targetX = random (rayon, width-rayon);
-            targetY = random (rayon, height-rayon);
-        }
+    	if( selected ){
+    		targetX = width/2;
+    		targetY = height/2;
 
-        targetX = constrain(targetX, rayon, width-rayon);
-        targetY = constrain(targetY, rayon, height-rayon);
+            centreX = ease(centreX, targetX, 0.01);
+            centreY = ease(centreY, targetY, 0.01);
 
+            rayon = max( ++rayon, 70 );
+            if( frameCount % 25 ) tarAngle = random(360);
+            angle = ease(angle, tarAngle, 0.1);
 
-        if (kicked) {
-            easing = .3;
+            selectedTime++;
+            if( selectedTime > 300 ){
+            	rayon = 0;
 
-            // println(frameCount - originKicked, originKicked);
-            if ( frameCount - originKicked == kickDuration) {
-                easing = cellEasing;
-                kicked = false;
+				socket.emit("emitCell", {
+					"nbCotes" : c.nbCotes,
+					"r" : c.r,
+					"color" : c.couleur
+				});
             }
-        }
+		}
+		else{
+	        if ( dropped == true ) {
+	            targetY = int( random(height-rayon, height) );
+	        } else if ( frameCount % delay  == 0 ) {
+	            targetX = random (rayon, width-rayon);
+	            targetY = random (rayon, height-rayon);
+	        }
 
-        if (disappearing) {
-            rayon--;
-        }
+	        targetX = constrain(targetX, rayon, width-rayon);
+	        targetY = constrain(targetY, rayon, height-rayon);
 
-        if (!disappearing && (rayon < cellRayon)) {
-            rayon++;
-            appearing = true;
-        } else {
-            appearing = false;
-        }
 
-        if (disappearing || appearing) {
-        } else {
-            centreX = ease(centreX, targetX, easing );
-            centreY = ease(centreY, targetY, easing);
-        }
+	        if (kicked) {
+	            easing = .3;
+
+	            // println(frameCount - originKicked, originKicked);
+	            if ( frameCount - originKicked == kickDuration) {
+	                easing = cellEasing;
+	                kicked = false;
+	            }
+	        }
+
+	        if (disappearing) {
+	            rayon--;
+	        }
+
+	        if (!disappearing && (rayon < cellRayon)) {
+	            rayon++;
+	            appearing = true;
+	        } else {
+	            appearing = false;
+	        }
+
+	        if (disappearing || appearing) {
+	        } else {
+	            centreX = ease(centreX, targetX, easing );
+	            centreY = ease(centreY, targetY, easing);
+	        }
+	    }
     }
 
     float ease(float value, float target, float easingVal) {

@@ -52,12 +52,11 @@ void draw() {
             c.draw();
         }
 
-
         // hit test
-        if (!c.dropped && frameCount > frameDrop+50 ) {
+        if (!c.selected && !c.dropped && frameCount > frameDrop+50 ) {
             for (int j=i+1; j<cells.size(); j++) {
                 Cell c2 = cells.get(j);
-                if ( hitTest(c, c2) ) {
+                if ( !c2.selected && hitTest(c, c2) ) {
                     newHit = true;
                     if (c.isHit) {
                         if (random(1) > .5) {
@@ -92,14 +91,9 @@ void sleepAll() {
 }
 
 void emitCell() {
+  console.log("emitCell");
   Cell c = cells.get(int(random(cells.size())));
-  console.log("emitCell")
-  // animate cell
-  socket.emit("emitCell", {
-    "nbCotes" : c.nbCotes,
-    "r" : c.r,
-    "color" : c.couleur
-  }.toString());
+  c.selected = true;
 }
 
 void keyPressed() {
