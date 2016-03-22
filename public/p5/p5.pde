@@ -8,22 +8,41 @@ void setup() {
   smooth();
 
   for (int i=0; i<NB_CELLS; i++) {
-    cells.add( getNewCell(width/2, height/2) );
+    cells.add( getNewCell() );
   }
 }
 
-Cell getNewCell(int x, int y) {
-  // Cell c = new Triangle(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
-  
+Cell getNewCell() {
+  int x =int( random(0, width));
+  int y = int(random(0,height));
 
-  return new Triangle(x, y);
+  Cell c = new Cell();
+  int cellType = int(random(3));
+  println(cellType);
+  switch(cellType) {
+    case 0 :
+      c = new Triangle(x, y);
+      break;
+    case 1 :
+      c = new Square(x, y);
+      break;
+    case 2 :
+      c=  new Blob(x, y);
+      break;
+  }
+
+  return c;
+
+
 }
+
 
 void draw() {
   background(#241f38);
 
   for (int i=0; i<cells.size(); i++) {
     Cell c = cells.get(i);
+    boolean newHit = false;
     if (c.rayon == 0) { // remove cell if the radius is 0
       cells.remove(i);
     } else {
@@ -33,15 +52,21 @@ void draw() {
     for (int j=i+1; j<cells.size(); j++) {
         Cell c2 = cells.get(j);
         if ( hitTest(c, c2) ){
-          // println(frameCount, "hhhiiiiiitt");
-          // c.trajectoireX = c.trajectoireX*-1;
-          // c.trajectoireY = c.trajectoireY*-1;
-          // c2.trajectoireX = c2.trajectoireX*-1;
-          // c2.trajectoireY = c2.trajectoireY*-1;
-          // c.kick();
-          // c2.kick();
+          newHit = true;
+          if(c.isHit) {
+            if(random(1) > .5) {
+              c.onCollision(c2);
+            } else {
+              c2.onCollision(c);
+            }
+          }
+          c.isHit = true;
+          c2.isHit = true;
       }
     }
+    if(!newHit) c.isHit = false;
+
+
   }
 }
 
@@ -71,16 +96,30 @@ void keyPressed() {
     c.kick();
   } else if (key == 'e') {
     c.disappear();
-  } else if (key == 'r') {
-    // add 2 cells
-    c.disappear();
-    cells.add( getNewCell(c.centreX, c.centreY) );
-    cells.add( getNewCell(c.centreX, c.centreY) );
   } else if (key == 't') {
     c.cellRayon=c.cellRayon+10;
   } else if (key == ' ') {
     c.kick();
+  } else if (key == 'w') {
+    int x =int( random(0, width));
+    int y = int(random(0,height));
+    c = new Triangle(x, y);
+    cells.add(c);
+  } else if (key == 'x') {
+      int x =int( random(0, width));
+      int y = int(random(0,height));
+      c = new Square(x, y);
+      cells.add(c);
+  } else if (key == 'c') {
+      int x =int( random(0, width));
+      int y = int(random(0,height));
+      c = new Blob(x, y);
+      cells.add(c);
   }
+}
+
+void split(){
+  cells.add( getNewCell() );
 }
 
 float squareDist(Cell c1,Cell c2){

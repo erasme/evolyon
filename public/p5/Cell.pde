@@ -1,3 +1,5 @@
+final static float SPEED = 0.0005;
+
 class Cell {
 
   int centreX;
@@ -17,8 +19,13 @@ class Cell {
   int cellRayon;
   boolean appearing;
 
+  boolean isHit = true;
+
   color couleur;
 
+  Cell() {
+    // empy
+  }
 
   Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
     centreX = centreX_;
@@ -30,7 +37,7 @@ class Cell {
 
     cellRayon = rayon_;
 
-    cellEasing = random(0, 0.02);
+    cellEasing = random(0, SPEED);
     easing = cellEasing;
 
     delay = int(random(75,100));
@@ -64,7 +71,7 @@ class Cell {
   void kick() {
     originKicked = frameCount;
     kicked = true;
-    couleur = #CCCC00;
+    // couleur = #CCCC00;
   }
 
   boolean disappearing = false;
@@ -118,8 +125,6 @@ class Cell {
     }
 
 
-
-
     draw();
   }
 
@@ -163,6 +168,11 @@ class Cell {
 
     endShape(CLOSE);
   }
+
+  void onCollision(Cell targetCell){
+
+  }
+
 }
 
 
@@ -172,8 +182,8 @@ class Triangle extends Cell {
     super(x, y, 3, 10, int(random(360)), sin(frameCount/40.)*0.2+1 );
   }
 
-  void onCollision(){
-      kick();
+  void onCollision(Cell targetCell){
+      targetCell.disappear();
   }
 
 }
@@ -183,11 +193,19 @@ class Square extends Cell {
     super(x, y, 4, 10, int(random(360)), sin(frameCount/40.)*0.2+1 );
   }
 
-  void onCollision(){
-      kick();
+  void onCollision(Cell targetCell){
+      targetCell.kick();
   }
 }
-//
-// class Blob extends Cell {
-//   // new Cell(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
-// }
+
+class Blob extends Cell {
+  Blob(int x, int y){
+    super(x, y, 8, 10, int(random(360)), sin(frameCount/40.)*0.2+1 );
+  }
+
+  void onCollision(Cell targetCell){
+    // if(random(1) < 0.05){
+    split();
+    // }
+  }
+}
