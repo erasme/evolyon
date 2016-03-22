@@ -30,11 +30,8 @@ redisClient.on("message", function(channel, message){
   //pop off new item
   console.log("redis-message");
   console.log(message);
+  phoneReady = true;
 
-  io.emit("phoneReady", function(data){
-    console.log(data);
-  })
-  
 });
 
 /*
@@ -223,7 +220,7 @@ ootsidebox.on( 'data', function( data, err ) {
     updateMinMax( gesture );
 
     var presence = ( gesture.z < 200 );
-    
+
     if( presence && phoneReady && Date.now() - timePresStarted > 3000 ){
     	//send Cell to Phone
     	io.emit( 'phoneReady', {} );

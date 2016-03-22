@@ -33,24 +33,24 @@ function updateGesture( data ) {
 
 socket.on( 'mouseDown', function( data ) {
     updateGesture( data );
-    console.log( 'mouseDown', gesture );
+    // console.log( 'mouseDown', gesture );
     mouseDownEvent( gesture.x, gesture.y );
 } );
 
 socket.on( 'mouseMoved', function( data ) {
     updateGesture( data );
-    console.log( 'mouseMoved' );
+    // console.log( 'mouseMoved' );
     mouseMovedEvent( gesture.x, gesture.y );
 } );
 
 socket.on( 'mouseUp', function( data ) {
     updateGesture( data );
-    console.log( 'mouseUp', gesture );
+    // console.log( 'mouseUp', gesture );
     mouseUpEvent( gesture.x, gesture.y );
 } );
 
 socket.on( 'phoneReady', function( data ){
-	
+	console.log("display cell");
 } );
 
 /////////////////////////////////////////////
@@ -98,18 +98,18 @@ function getCanvasRect( canvas ) {
 // Mouse Events
 function mouseDownEvent( x, y ) {
     _isDown = true;
-    if ( _points.length > 0 )
-        _g.clearRect( 0, 0, _rc.width, _rc.height );
+    // if ( _points.length > 0 )
+    //     _g.clearRect( 0, 0, _rc.width, _rc.height );
     _points.length = 1; // clear
     _points[ 0 ] = new Point( x, y );
     drawText( "Recording unistroke..." );
-    _g.fillRect( x - 4, y - 3, 9, 9 );
+    // _g.fillRect( x - 4, y - 3, 9, 9 );
 }
 
 function mouseMovedEvent( x, y ) {
     if ( _isDown ) {
         _points[ _points.length ] = new Point( x, y ); // append
-        drawConnectedPoint( _points.length - 2, _points.length - 1 );
+        // drawConnectedPoint( _points.length - 2, _points.length - 1 );
     }
 }
 
