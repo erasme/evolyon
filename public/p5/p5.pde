@@ -1,4 +1,4 @@
-int NB_CELLS = 30; // init cell numbers
+int NB_CELLS = 1; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 boolean sleeping = false;
 
@@ -49,7 +49,7 @@ void draw() {
       c.move();
     }
 
-    println(sleeping);
+    // println(sleeping);
 
     // hit test
     if(!sleeping) {
@@ -104,22 +104,35 @@ void keyPressed() {
   } else if (key == ' ') {
     c.kick();
   } else if (key == 'w') {
-    int x =int( random(0, width));
-    int y = int(random(0,height));
-    c = new Triangle(x, y);
-    cells.add(c);
+    newTriangle();
   } else if (key == 'x') {
-      int x =int( random(0, width));
-      int y = int(random(0,height));
-      c = new Square(x, y);
-      cells.add(c);
+    newBlob();
   } else if (key == 'c') {
-      int x =int( random(0, width));
-      int y = int(random(0,height));
-      c = new Blob(x, y);
-      cells.add(c);
+    newSquare();
   }
 }
+
+Cell newTriangle() {
+  int x =int( random(0, width));
+  int y = int(random(0,height));
+  c = new Triangle(x, y);
+  cells.add(c);
+}
+
+Cell newBlob() {
+  int x =int( random(0, width));
+  int y = int(random(0,height));
+  c = new Blob(x, y);
+  cells.add(c);
+}
+
+Cell newSquare() {
+  int x =int( random(0, width));
+  int y = int(random(0,height));
+  c = new Square(x, y);
+  cells.add(c);
+}
+
 
 void split(){
   cells.add( getNewCell() );

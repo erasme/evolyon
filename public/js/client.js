@@ -25,10 +25,6 @@ socket.on( 'presence', function( data ) {
     console.log( 'presence:', data.presence );
 } );
 
-socket.on( 'cells', function( data ) {
-    console.log( "new cells" );
-    cells = data;
-} );
 
 
 function updateGesture( data ) {
@@ -132,11 +128,37 @@ function mouseUpEvent( x, y ) {
             // var result = _r.Recognize( _points, document.getElementById( 'useProtractor' ).checked );
             var result = _r.Recognize( _points, false );
             drawText( result.Name + " (" + round( result.Score, 2 ) + ")" );
+
+            applyGesture(result.Name);
+
+
         } else // fewer than 10 points were inputted
         {
             drawText( "Too few points made. Please try again." );
         }
     }
+}
+
+function applyGesture(type) {
+  var pjs = Processing.getInstanceById("cells");
+  console.log(type);
+  switch(type) {
+      case "triangle":
+        console.log("TR");
+        pjs.newTriangle();
+        break;
+      case "rectangle":
+        console.log("RECT");
+        pjs.newSquare();
+        break;
+      case "circle":
+        console.log("CIRC");
+        pjs.newBlob();
+        break;
+      case "zig-zag":
+        console.log("ZZ");
+        break;
+  }
 }
 
 function drawText( str ) {

@@ -16,9 +16,15 @@ body{
 } */
 
 #gesture{
+	position: fixed;
+	top:0;
+	left:10;
 	color: white;
-	font-size: 48pt;
 	text-align: center;
+}
+
+#gestureCanvas {
+	display: none;
 }
 #visual {
 	width: 100%;
