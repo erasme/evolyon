@@ -8,20 +8,4 @@ class Blob extends Cell {
             split();
         }
     }
-
-    void draw() {
-        stroke(couleur, 30);
-        strokeWeight(8);
-        polygon(centreX, centreY, 8, rayon, angle, sin(frameCount/60.)*0.1+1, true);
-        
-        stroke(couleur, 20);
-        strokeWeight(12);
-        polygon(centreX, centreY, 8, rayon, angle, sin(frameCount/60.)*0.1+1, true);
-
-    	if( isHit ) fill(couleur, 100);
-        stroke(couleur);
-        strokeWeight(2);
-        polygon(centreX, centreY, 8, rayon, angle, sin(frameCount/60.)*0.1+1, true);
-        if(isHit) noFill();
-    }
 }

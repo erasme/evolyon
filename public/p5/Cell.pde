@@ -128,7 +128,17 @@ class Cell {
     }
 
     void draw() {
-        polygon(centreX, centreY, 6, rayon, angle, 1, false);
+        stroke(couleur, 30);
+        strokeWeight(8);
+        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
+
+        stroke(couleur, 20);
+        strokeWeight(12);
+        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
+        
+        stroke(couleur);
+        strokeWeight(2);
+        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
     }
 
     void polygon(float centreX, float centreY, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {

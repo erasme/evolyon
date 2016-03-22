@@ -27,11 +27,10 @@ redisClient.on('connect', function() {
 // subscribe to redis
 redisClient.subscribe("evolyon");
 redisClient.on("message", function(channel, message){
-  //pop off new item
-  console.log("redis-message");
-  console.log(message);
-  phoneReady = true;
-
+    //pop off new item
+    console.log("redis-message");
+    console.log(message);
+    phoneReady = true;
 });
 
 /*
@@ -222,14 +221,14 @@ ootsidebox.on( 'data', function( data, err ) {
     var presence = ( gesture.z < 200 );
 
     if( presence && phoneReady && Date.now() - timePresStarted > 3000 ){
-    	//send Cell to Phone
-    	io.emit( 'phoneReady', {} );
-    	phoneReady = false;
+        //send Cell to Phone
+        io.emit( 'phoneReady', {} );
+        phoneReady = false;
     }
 
     // console.log( presence );
     if( !prevPresence && presence ){
-    	timePresStarted = Date.now();
+        timePresStarted = Date.now();
         io.emit('presence', { 'presence': true });
         console.log('presence', { 'presence': true });
     }
@@ -272,12 +271,6 @@ ootsidebox.on( 'data', function( data, err ) {
     prevActive = active;
     prevGest = gesture;
 } );
-
-/*
-on('phoneReady', function(){
-	phoneReady = true;
-});
-*/
 
 /*
         __  ___      __  __       ____                 __  _
