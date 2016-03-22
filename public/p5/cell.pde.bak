@@ -10,12 +10,12 @@ void setup() {
 void draw() {
 	background(0);
 
-	/*cells.forEach( function( d ){
-		if( d.delay % frameCount == 0 ){
+	cells.forEach( function( d ){
+		if( frameCount % d.delay == 0 ){
 			d.dx = int(random( w ));
 			d.dy = int(random( h ));
 		}
-	} );*/
+	} );
 
 	var ootX = gesture.x * w;
 	var ootY = gesture.y * h;
