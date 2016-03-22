@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Evolyon</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- <h1>Evolyon</h1> -->
+
+  	<canvas id="gestureCanvas" width="420" height="400" style="background-color:#dddddd" onmousedown="mouseDownEvent(event.clientX, event.clientY)" onmousemove="mouseMovedEvent(event.clientX, event.clientY)" onmouseup="mouseUpEvent(event.clientX, event.clientY)" oncontextmenu="return false;"></canvas>
+
+
+    <canvas id="cells" data-processing-sources="/p5/Cell.pde /p5/p5.pde"></canvas>
+    <p id="gesture"></p>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/processing.js"></script>
+    <script src="/lib/d3.js" charset="utf-8"></script>
+	  <script src="/lib/dollar.js"></script>
+    <script src="/js/client.js"></script>
+
+
+</body>
+
+</html>

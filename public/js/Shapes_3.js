@@ -22,7 +22,7 @@ function setup() {
     newNomNom();
   }
   
-  mic = new p5.AudioIn()
+  mic = new p5.AudioIn();
   mic.start();
   
 //  size(window.innerWidth, window.innerHeight, P3D);

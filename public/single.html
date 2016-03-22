@@ -15,10 +15,10 @@
 <body>
 
 	<div id="container">
-		<img src="logo.svg" id="logo">
-		<div class="chargement hidden"><img src="chargement.gif"></div>
+		<img src="/logo.svg" id="logo">
+		<div class="chargement hidden"><img src="/chargement.gif"></div>
 			<div id="btnActivate">
-				<p>Attire <br>une particule <br> dans ton téléphone</p>
+				<p>Appuie pour attirer <br>une particule <br> dans ton téléphone</p>
 			</div>
 		<script type="text/javascript" src="/lib/processing.min.js"></script>
 		<!--<canvas id="particle" class="hidden" data-processing-sources="Shapes_3/Triangle.pde Shapes_3/Shapes_3.pde"></canvas>-->
@@ -44,28 +44,39 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-
-			//	$(document).bind('touchmove', false);
-
-				console.log("ready");
-					var hammertime = new Hammer(btnActivate);/* variable pour créer une action au bout de 3 secondes de touch"*/
-					var hammertime2 = new Hammer(btnActivate);/* variable pour détecter le touch*/
-					hammertime.get('press').set({
-						time : 4000,
-						pointers : 1,
-						threshold : 10
-					});/* options pour le touch dont la variable est var hammertime*/
-					hammertime2.on("press",function(ev){
-						$(".chargement").removeClass('hidden');
-					});/* je touche donc j'enlève a classe hidden pour dévoiler le gif*/
-					hammertime2.on("pressup", function(ev) {
-						$(".chargement").addClass('hidden');
-					});/* je touche plus donc je cache le chargement*/
-					hammertime.on("press", function(ev) {
-						$("#btnActivate").remove();
-						$("#particle").removeClass('hidden');
-					});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
-					 });
+  		
+			console.log("jQuery ready");
+			
+			var touchZone = document.getElementsByTagName('html')[0];
+		//	var touchZone = document.getElementById('btnActivate');
+			
+			var hammertime = new Hammer(touchZone);/* variable pour créer une action au bout de 3 secondes de touch"*/
+			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
+			
+			hammertime.get('press').set({
+				time : 4000,
+				pointers : 1,
+				threshold : 10
+			});/* options pour le touch dont la variable est var hammertime*/
+			
+			
+			hammertime2.on("press",function(ev){
+				$(".chargement").removeClass('hidden');
+        console.log("j'ai appuyé");
+        
+        $('#debug').text('j\'ai appuyé');
+			});/* je touche donc j'enlève a classe hidden pour dévoiler le gif*/
+			
+			hammertime2.on("pressup", function(ev) {
+				$(".chargement").addClass('hidden');
+			});/* je touche plus donc je cache le chargement*/
+			
+			hammertime.on("press", function(ev) {
+				$("#btnActivate").remove();
+				$("#particle").removeClass('hidden');
+			});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
+			
+		});
 	</script>
 </body>
 </html>
