@@ -102,6 +102,7 @@ var POS_LENGTH = 20,
     minX = 999, maxX = -999,
     minY = 999, maxY = -999,
     minZ = 999, maxZ = -999,
+    prevPresence = false,
     prevActive = false,
     prevGest = {
         x: 0,
@@ -202,14 +203,16 @@ ootsidebox.on( 'data', function( data, err ) {
     addGesture( gesture );
     updateMinMax( gesture );
 
+    var presence = ( gesture.z != 300 );
+    if( !prevPresence && presence ){
+        io.emit('presence', { presence: true });
+    }
+    else if( prevPresence && !presence ){
+        io.emit('presence', { presence: false });
+    }
+
     var active = ( gesture.z < 50 );
     // console.log( active );
-
-    /*var normedGesture = {
-        x: map( getAverage('x'), minX, maxX, 0, 1 ),
-        y: map( getAverage('y'), minY, maxY, 0, 1 ),
-        z: map( getAverage('z'), minZ, maxZ, 0, 1 )
-    };*/
 
     var normedGesture = {
         x: map( gesture.x, minX, maxX, 0, 1 ),
