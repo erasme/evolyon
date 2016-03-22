@@ -10,6 +10,7 @@ class Cell {
   float amplitude;
   int delay;
   boolean dropped;
+  float easing;
 
 
   Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
@@ -20,6 +21,7 @@ class Cell {
     angle = angle_;
     amplitude = amplitude_;
 
+    easing = 0.05;
     delay = int(random(5,100));
     dropped = false;
 
@@ -33,18 +35,38 @@ class Cell {
     dropped = false;
   }
 
+  boolean kicked = false;
+  void kick() {
+      kicked = true;
+  }
+
   void move() {
 
     if( dropped == true ){
       trajectoireX = centreX;
-      trajectoireY = height-rayon;
+      if ( frameCount % delay  == 0 ) {
+
+        trajectoireY = int( random(height-rayon-50, height) );
+
+      }
     } else if ( frameCount % delay  == 0 ) {
       trajectoireX = int(random (rayon, width-rayon));
       trajectoireY = int(random (rayon, height-rayon));
     }
 
-    centreX  = ease(centreX, trajectoireX, 0.05 );
-    centreY = ease(centreY, trajectoireY, 0.05 );
+    int originKicked;
+
+    if (kicked) {
+      easing = .3;
+      originKicked = frameCount;
+      if( frameCount - originKicked == 10) {
+        easing = .03;
+      }
+
+    }
+
+    centreX  = ease(centreX, trajectoireX, easing );
+    centreY = ease(centreY, trajectoireY, easing);
 
     draw();
   }

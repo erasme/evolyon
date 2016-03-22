@@ -25,9 +25,7 @@ void draw() {
 }
 
 boolean dropped = false;
-
-void mousePressed() {
-  
+void sleepAwakeAll() {
   if (dropped) {
     for (int i=0; i<polygonArray.length; i++) {
       polygonArray[i].drop();
@@ -43,5 +41,9 @@ void mousePressed() {
 
 
 void keyPressed() {
-  println(keyPressed);
+  if (key == 'a') {
+    sleepAwakeAll();
+  } else if (key == 'z') {
+    polygonArray[0].kick();
+  }
 }
