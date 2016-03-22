@@ -25,8 +25,6 @@ socket.on( 'presence', function( data ) {
     console.log( 'presence:', data.presence );
 } );
 
-
-
 function updateGesture( data ) {
     gesture = data;
     gesture.x = ~~ ( data.x * 400 );
@@ -49,6 +47,10 @@ socket.on( 'mouseUp', function( data ) {
     updateGesture( data );
     console.log( 'mouseUp', gesture );
     mouseUpEvent( gesture.x, gesture.y );
+} );
+
+socket.on( 'phoneReady', function( data ){
+	
 } );
 
 /////////////////////////////////////////////
@@ -91,16 +93,6 @@ function getCanvasRect( canvas ) {
         width: w,
         height: h
     };
-}
-
-function getScrollY() {
-    var scrollY = 0;
-    if ( typeof( document.body.parentElement ) != 'undefined' ) {
-        scrollY = document.body.parentElement.scrollTop; // IE
-    } else if ( typeof( window.pageYOffset ) != 'undefined' ) {
-        scrollY = window.pageYOffset; // FF
-    }
-    return scrollY;
 }
 
 // Mouse Events
@@ -163,10 +155,6 @@ function applyGesture(type) {
 
 function drawText( str ) {
 	h1.innerHTML = str;
-    // _g.fillStyle = "rgb(255,255,136)";
-    // _g.fillRect( 0, 0, _rc.width, 20 );
-    // _g.fillStyle = "rgb(0,0,255)";
-    // _g.fillText( str, 1, 14 );
 }
 
 function drawConnectedPoint( from, to ) {

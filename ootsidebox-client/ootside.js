@@ -131,7 +131,8 @@ var POS_LENGTH = 20,
     },
     prevTime = Date.now(),
     prevEvent = null,
-    minTimeDiffBetweenEvents = 20;
+    minTimeDiffBetweenEvents = 20,
+    phoneReady = false;
 
 
 // tell OootsideBox to send raw values instead of pre-calculated events
@@ -222,8 +223,15 @@ ootsidebox.on( 'data', function( data, err ) {
     updateMinMax( gesture );
 
     var presence = ( gesture.z < 200 );
+    
+    if( presence && phoneReady && Date.now() - timePresStarted > 3000 ){
+    	//send Cell to Phone
+    	io.emit( 'phoneReady', {} );
+    	phoneReady = false;
+    }
+
     // console.log( presence );
-    if( !prevPresence && presence){
+    if( !prevPresence && presence ){
     	timePresStarted = Date.now();
         io.emit('presence', { 'presence': true });
         console.log('presence', { 'presence': true });
@@ -268,6 +276,11 @@ ootsidebox.on( 'data', function( data, err ) {
     prevGest = gesture;
 } );
 
+/*
+on('phoneReady', function(){
+	phoneReady = true;
+});
+*/
 
 /*
         __  ___      __  __       ____                 __  _
