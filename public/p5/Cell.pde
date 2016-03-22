@@ -12,6 +12,7 @@ class Cell {
     float amplitude;
     int delay;
     boolean dropped;
+    boolean selected = false;
 
     float easing;
     float cellEasing; // backup the values
