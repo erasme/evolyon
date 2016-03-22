@@ -10,6 +10,7 @@ var backgroundOpacity = 0;
 var bounceSpeed = 0;
 
 var nomnoms = [];
+var mic;
 
 
 function setup() {
@@ -21,12 +22,20 @@ function setup() {
     newNomNom();
   }
   
+  mic = new p5.AudioIn()
+  mic.start();
+  
 //  size(window.innerWidth, window.innerHeight, P3D);
   smooth();
 }
 
 function draw(event) {
   background('rgb(36,31,56)');
+  
+  fill('rgb(255,0,0)');
+  micLevel = mic.getLevel();
+  ellipse(width/2, constrain(height-micLevel*height*5, 0, height), 10, 10);
+
   
   if (backgroundOpacity > .1) {
     fill('rgba(255,33,124,'+backgroundOpacity+')');
