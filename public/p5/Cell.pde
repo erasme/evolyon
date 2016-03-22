@@ -17,8 +17,10 @@ class Cell {
   int cellRayon;
   boolean appearing;
 
+  color couleur;
 
-  Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
+
+  Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_, color couleur_) {
     centreX = centreX_;
     centreY = centreY_;
     nbCotes = nbCotes_;
@@ -36,6 +38,8 @@ class Cell {
 
     // init creation
     appearing = true;
+
+    couleur =couleur_;
 
   }
 
@@ -118,6 +122,10 @@ class Cell {
 
   void draw() {
 
+    stroke(couleur);
+    strokeWeight(2);
+    strokeJoin(ROUND);
+    strokeCap(ROUND);
 
     PVector[] pos = new PVector[nbCotes];
 
