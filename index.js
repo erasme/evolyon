@@ -221,8 +221,8 @@ ootsidebox.on( 'data', function( data, err ) {
     // console.log( active );
 
     var normedGesture = {
-        x: map( gesture.x, minX, maxX, 0, 1 ),
-        y: map( gesture.y, minY, maxY, 0, 1 ),
+        x: map( gesture.x, minX, maxX, 1, 0 ),
+        y: map( gesture.y, minY, maxY, 1, 0 ),
         z: map( gesture.z, minZ, maxZ, 0, 1 )
     };
 

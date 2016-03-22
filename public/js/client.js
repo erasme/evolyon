@@ -21,10 +21,6 @@ socket.on( 'connect', function( data ) {
     console.log( "connected to socket" );
 } );
 
-socket.on( 'ha', function( data ) {
-    console.log( "haha" );
-} );
-
 socket.on( 'presence', function( data ) {
     console.log( 'presence:', data.presence );
 } );
@@ -61,12 +57,13 @@ socket.on( 'mouseUp', function( data ) {
 
 /////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
-var canvas;
+var canvas, h1;
 
 function onLoadEvent() {
     _points = new Array();
     _r = new DollarRecognizer();
 
+    h1 = document.getElementById( 'gesture' );
     canvas = document.getElementById( 'myCanvas' );
     _g = canvas.getContext( '2d' );
     _g.fillStyle = "rgb(0,0,225)";
@@ -112,15 +109,7 @@ function getScrollY() {
 
 // Mouse Events
 function mouseDownEvent( x, y ) {
-    document.onselectstart = function() {
-        return false;
-    } // disable drag-select
-    document.onmousedown = function() {
-        return false;
-    } // disable drag-select
     _isDown = true;
-    // x -= _rc.x;
-    // y -= _rc.y;// - getScrollY();
     if ( _points.length > 0 )
         _g.clearRect( 0, 0, _rc.width, _rc.height );
     _points.length = 1; // clear
@@ -131,26 +120,18 @@ function mouseDownEvent( x, y ) {
 
 function mouseMovedEvent( x, y ) {
     if ( _isDown ) {
-        // x -= _rc.x;
-        // y -= _rc.y;// - getScrollY();
         _points[ _points.length ] = new Point( x, y ); // append
         drawConnectedPoint( _points.length - 2, _points.length - 1 );
     }
 }
 
 function mouseUpEvent( x, y ) {
-    document.onselectstart = function() {
-        return true;
-    } // enable drag-select
-    document.onmousedown = function() {
-        return true;
-    } // enable drag-select
     if ( _isDown ) {
         _isDown = false;
         if ( _points.length >= 10 ) {
             // var result = _r.Recognize( _points, document.getElementById( 'useProtractor' ).checked );
             var result = _r.Recognize( _points, false );
-            drawText( "Result: " + result.Name + " (" + round( result.Score, 2 ) + ")." );
+            drawText( result.Name + " (" + round( result.Score, 2 ) + ")" );
         } else // fewer than 10 points were inputted
         {
             drawText( "Too few points made. Please try again." );
@@ -159,10 +140,11 @@ function mouseUpEvent( x, y ) {
 }
 
 function drawText( str ) {
-    _g.fillStyle = "rgb(255,255,136)";
-    _g.fillRect( 0, 0, _rc.width, 20 );
-    _g.fillStyle = "rgb(0,0,255)";
-    _g.fillText( str, 1, 14 );
+	h1.innerHTML = str;
+    // _g.fillStyle = "rgb(255,255,136)";
+    // _g.fillRect( 0, 0, _rc.width, 20 );
+    // _g.fillStyle = "rgb(0,0,255)";
+    // _g.fillText( str, 1, 14 );
 }
 
 function drawConnectedPoint( from, to ) {
