@@ -151,7 +151,7 @@ io.on( 'connection', function( socket ) {
   console.log("socket connected");
 
 	// send cells infomation
-	socket.emit( 'cells', cells );
+	io.emit( 'cells', cells );
 
 	// parse raw data
 	ootsidebox.on( 'data', function( data, err ) {
@@ -183,6 +183,8 @@ io.on( 'connection', function( socket ) {
 			z: map( gesture.z, minZ, maxZ, 0, 1 )
 		};
 
+
+
 		// console.log(normedGesture);
     var currentEvent = null;
     if( active && !prevActive ){
@@ -198,10 +200,10 @@ io.on( 'connection', function( socket ) {
 
     // emit if event has changed
     if(currentEvent && (currentEvent != prevEvent)) {
-      socket.emit( currentEvent, normedGesture );
+      io.emit( currentEvent, normedGesture );
       console.log(currentEvent);
     } else if ( currentEvent && Date.now() - prevTime > minTimeDiffBetweenEvents) {
-      socket.emit( currentEvent, normedGesture );
+      io.emit( currentEvent, normedGesture );
       console.log(currentEvent);
       prevTime = Date.now();
     }
