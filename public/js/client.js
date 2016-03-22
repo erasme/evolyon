@@ -8,48 +8,55 @@ var abribus = {
 
 var h = window.innerHeight - 50;
 var w = ( 120 / 176 ) * h;
-var gesture = { x:0, y:0, z:0 };
-
+var gesture = {
+    x: 0,
+    y: 0,
+    z: 0
+};
 var cells = [];
-
 
 var socket = io();
 
+socket.on( 'connect', function( data ) {
+    console.log( "connected to socket" );
+} );
+
+socket.on( 'ha', function( data ) {
+    console.log( "haha" );
+} );
+
+socket.on( 'presence', function( data ) {
+    console.log( 'presence:', data.presence );
+} );
+
 socket.on( 'cells', function( data ) {
-    console.log("new cells");
+    console.log( "new cells" );
     cells = data;
 } );
 
-function updateGesture( data ){
-	gesture = data;
-	gesture.x = ~~(data.x * 400);
-	gesture.y = 400 - (~~(data.y * 400));
+
+function updateGesture( data ) {
+    gesture = data;
+    gesture.x = ~~ ( data.x * 400 );
+    gesture.y = 400 - ( ~~( data.y * 400 ) );
 }
 
-socket.on( 'connect', function(data) {
-  console.log("connected to socket");
-})
-
-socket.on( 'ha', function(data) {
-  console.log("haha");
-})
-
-socket.on( 'mouseDown', function( data ){
-	updateGesture( data );
-	console.log( 'mouseDown', gesture );
-	mouseDownEvent( gesture.x, gesture.y );
+socket.on( 'mouseDown', function( data ) {
+    updateGesture( data );
+    console.log( 'mouseDown', gesture );
+    mouseDownEvent( gesture.x, gesture.y );
 } );
 
-socket.on( 'mouseMoved', function( data ){
-	updateGesture( data );
-	console.log( 'mouseMoved' );
-	mouseMovedEvent( gesture.x, gesture.y );
-});
+socket.on( 'mouseMoved', function( data ) {
+    updateGesture( data );
+    console.log( 'mouseMoved' );
+    mouseMovedEvent( gesture.x, gesture.y );
+} );
 
-socket.on( 'mouseUp', function( data ){
-	updateGesture( data );
-	console.log( 'mouseUp', gesture );
-	mouseUpEvent( gesture.x, gesture.y );
+socket.on( 'mouseUp', function( data ) {
+    updateGesture( data );
+    console.log( 'mouseUp', gesture );
+    mouseUpEvent( gesture.x, gesture.y );
 } );
 
 /////////////////////////////////////////////
@@ -60,7 +67,7 @@ function onLoadEvent() {
     _points = new Array();
     _r = new DollarRecognizer();
 
-	canvas = document.getElementById( 'myCanvas' );
+    canvas = document.getElementById( 'myCanvas' );
     _g = canvas.getContext( '2d' );
     _g.fillStyle = "rgb(0,0,225)";
     _g.strokeStyle = "rgb(0,0,225)";
@@ -167,7 +174,6 @@ function drawConnectedPoint( from, to ) {
 }
 
 // round 'n' to 'd' decimals
-
 function round( n, d ) {
     d = Math.pow( 10, d );
     return Math.round( n * d ) / d

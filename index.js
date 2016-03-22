@@ -103,6 +103,8 @@ var POS_LENGTH = 20,
     minY = 999, maxY = -999,
     minZ = 999, maxZ = -999,
     prevPresence = false,
+    minTimeBeforeNoPresence = 10000,
+    timePresStarted = 0,
     prevActive = false,
     prevGest = {
         x: 0,
@@ -190,7 +192,6 @@ ootsidebox.open( function( error ) {
 
 // parse raw data
 ootsidebox.on( 'data', function( data, err ) {
-
     var raw = data.split( "|" );
     if ( raw.length == 1 ) sendRawInstructions(); // make sure the V is sent
 
@@ -203,13 +204,18 @@ ootsidebox.on( 'data', function( data, err ) {
     addGesture( gesture );
     updateMinMax( gesture );
 
-    var presence = ( gesture.z != 300 );
-    if( !prevPresence && presence ){
-        io.emit('presence', { presence: true });
+    var presence = ( gesture.z < 200 );
+    // console.log( presence );
+    if( !prevPresence && presence){
+    	timePresStarted = Date.now();
+        io.emit('presence', { 'presence': true });
+        console.log('presence', { 'presence': true });
     }
-    else if( prevPresence && !presence ){
-        io.emit('presence', { presence: false });
+    else if( prevPresence && !presence && Date.now() - timePresStarted >  minTimeBeforeNoPresence ){
+        io.emit('presence', { 'presence': false });
+        console.log('presence', { 'presence': false });
     }
+    prevPresence = presence;
 
     var active = ( gesture.z < 50 );
     // console.log( active );
