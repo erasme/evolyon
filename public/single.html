@@ -56,42 +56,28 @@
 
 
 			var touchZone = document.getElementsByTagName('html')[0];
-		//	var touchZone = document.getElementById('btnActivate');
 
-			var hammertime = new Hammer(touchZone);/* variable pour détecter le touch*/
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
-
-			hammertime.get('press').set({
-				time : 4000,
-				pointers : 1,
-				threshold : 10
-			});/* options pour le touch dont la variable est var hammertime*/
-
-
 			hammertime2.on("press",function(ev){
         console.log("j'ai appuyé");
 			});
 
 			hammertime2.on("pressup", function(ev) {
 					console.log("pressUp")
-
 					socket.emit( 'phoneReady');
-
 			});/* je touche plus donc je cache le chargement*/
 
 
+			var hammertime = new Hammer(touchZone);/* variable pour détecter le touch*/
 			hammertime.get('press').set({
 				time : 4000,
 				pointers : 1,
 				threshold : 10
 			});/* options pour le touch dont la variable est var hammertime*/
 
-
-
 			hammertime.on("press", function(ev) {
 				$("#btnActivate").remove();
 				$("#particle").removeClass('hidden');
-
 
 
 			});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/

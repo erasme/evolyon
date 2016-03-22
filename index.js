@@ -18,11 +18,27 @@ var redisHost = config.redisHost || "127.0.0.1";
 var redisPort = config.redisPort || "6379";
 
 var redis = require("redis");
-var redisClient = redis.createClient(redisPort, redisHost);
-
-redisClient.on('connect', function() {
-    console.log('Redis client connected on '+ redisHost+":"+ redisPort);
+var redisPhone = redis.createClient(redisPort, redisHost);
+var redisCell = redis.createClient(redisPort, redisHost);
+redisPhone.on('connect', function() {
+    console.log('Redis client (phone) connected on '+ redisHost+":"+ redisPort);
 });
+
+
+// listen to cell phone activty
+redisCell.on('connect', function() {
+    console.log('Redis client (cells) connected on '+ redisHost+":"+ redisPort);
+});
+
+// subscribe to redis
+redisPhone.subscribe("evolyonCell");
+redisPhone.on("message", function(channel, message){
+  //pop off new item
+  console.log("new cell");
+  console.log(channel,message);
+  phoneReady = true;
+});
+
 
 /*
         ____              __  _
@@ -67,6 +83,6 @@ io.on( 'connection', function( socket ) {
 
     socket.on( 'phoneReady', function() {
         console.log( "phone is ready, yo !" );
-        redisClient.publish("evolyon", "new cell is ready");
+        redisPhone.publish("evolyonPhone", "new cell is ready");
     });
 } );

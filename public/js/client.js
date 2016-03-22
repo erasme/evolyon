@@ -23,7 +23,27 @@ socket.on( 'connect', function( data ) {
 
 socket.on( 'presence', function( data ) {
     console.log( 'presence:', data.presence );
+    var pjs = Processing.getInstanceById("cells");
+    if(data.presence) {
+      pjs.awakeAll();
+    } else {
+      pjs.sleepAll();
+    }
 } );
+
+// DEBUG event
+document.onkeydown = checkKey;
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+        var pjs = Processing.getInstanceById("cells");
+        pjs.emitCell();
+    }
+}
+
 
 function updateGesture( data ) {
     gesture = data;
@@ -51,7 +71,8 @@ socket.on( 'mouseUp', function( data ) {
 
 socket.on( 'phoneReady', function( data ){
 	console.log("display cell");
-} );
+
+});
 
 /////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
@@ -62,15 +83,15 @@ function onLoadEvent() {
     _r = new DollarRecognizer();
 
     h1 = document.getElementById( 'gesture' );
-    canvas = document.getElementById( 'myCanvas' );
-    _g = canvas.getContext( '2d' );
-    _g.fillStyle = "rgb(0,0,225)";
-    _g.strokeStyle = "rgb(0,0,225)";
-    _g.lineWidth = 3;
-    _g.font = "16px Gentilis";
-    _rc = getCanvasRect( canvas ); // canvas rect on page
-    _g.fillStyle = "rgb(255,255,136)";
-    _g.fillRect( 0, 0, _rc.width, 20 );
+    // canvas = document.getElementById( 'myCanvas' );
+    // _g = canvas.getContext( '2d' );
+    // _g.fillStyle = "rgb(0,0,225)";
+    // _g.strokeStyle = "rgb(0,0,225)";
+    // _g.lineWidth = 3;
+    // _g.font = "16px Gentilis";
+    // _rc = getCanvasRect( canvas ); // canvas rect on page
+    // _g.fillStyle = "rgb(255,255,136)";
+    // _g.fillRect( 0, 0, _rc.width, 20 );
 
     _isDown = false;
 }
