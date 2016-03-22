@@ -30,7 +30,7 @@ class Cell {
 
     cellRayon = rayon_;
 
-    cellEasing = random(0, 0.05);
+    cellEasing = random(0, 0.02);
     easing = cellEasing;
 
     delay = int(random(75,100));
@@ -43,9 +43,9 @@ class Cell {
     if(nbCotes_ == 3) {
       couleur = color(#ff217c);
     } else if(nbCotes_ == 4) {
-      couleur = color(#a184b7);
-    } else {
       couleur = color(#0dffe1);
+    } else {
+      couleur = color(#a184b7);
     }
   }
 
@@ -64,6 +64,7 @@ class Cell {
   void kick() {
     originKicked = frameCount;
     kicked = true;
+    couleur = #CCCC00;
   }
 
   boolean disappearing = false;
@@ -165,4 +166,28 @@ class Cell {
 }
 
 
-class extends Cell {
+class Triangle extends Cell {
+
+  Triangle(int x, int y){
+    super(x, y, 3, 10, int(random(360)), sin(frameCount/40.)*0.2+1 );
+  }
+
+  void onCollision(){
+      kick();
+  }
+
+}
+
+class Square extends Cell {
+  Square(int x, int y){
+    super(x, y, 4, 10, int(random(360)), sin(frameCount/40.)*0.2+1 );
+  }
+
+  void onCollision(){
+      kick();
+  }
+}
+//
+// class Blob extends Cell {
+//   // new Cell(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
+// }

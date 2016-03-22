@@ -1,4 +1,4 @@
-int NB_CELLS = 20; // init cell numbers
+int NB_CELLS = 10; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 
 void setup() {
@@ -13,8 +13,10 @@ void setup() {
 }
 
 Cell getNewCell(int x, int y) {
-  Cell c = new Cell(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
-  return c;
+  // Cell c = new Triangle(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
+  
+
+  return new Triangle(x, y);
 }
 
 void draw() {
@@ -76,6 +78,8 @@ void keyPressed() {
     cells.add( getNewCell(c.centreX, c.centreY) );
   } else if (key == 't') {
     c.cellRayon=c.cellRayon+10;
+  } else if (key == ' ') {
+    c.kick();
   }
 }
 
