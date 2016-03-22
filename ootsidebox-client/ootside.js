@@ -18,19 +18,24 @@ var redisHost = config.redisHost || "127.0.0.1";
 var redisPort = config.redisPort || "6379";
 
 var redis = require("redis");
-var redisClient = redis.createClient(redisPort, redisHost);
+var redisPhone = redis.createClient(redisPort, redisHost);
+var redisCell = redis.createClient(redisPort, redisHost);
 
-redisClient.on('connect', function() {
-    console.log('Redis client connected on '+ redisHost+":"+ redisPort);
+redisPhone.on('connect', function() {
+    console.log('Redis (phone) client connected on '+ redisHost+":"+ redisPort);
+});
+
+redisCell.on('connect', function() {
+    console.log('Redis (cells) client connected on '+ redisHost+":"+ redisPort);
 });
 
 // subscribe to redis
-redisClient.subscribe("evolyon");
-redisClient.on("message", function(channel, message){
-    //pop off new item
-    console.log("redis-message");
-    console.log(message);
-    phoneReady = true;
+redisPhone.subscribe("evolyonPhone");
+redisPhone.on("message", function(channel, message){
+  //pop off new item
+  console.log("redis-message");
+  console.log(message);
+  phoneReady = true;
 });
 
 /*
@@ -87,6 +92,11 @@ io.on( 'connection', function( socket ) {
     socket.on( 'disconnect', function() {
         console.log( "bye !" );
     } );
+
+    socket.on( 'emitCell', function(data) {
+      console.log(data);
+      redisCell.publish("evolyonCell", data.toString());
+    });
 } );
 
 

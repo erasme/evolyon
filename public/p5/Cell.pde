@@ -11,6 +11,7 @@ class Cell {
     float angle;
     float amplitude;
     int delay;
+
     boolean dropped;
     boolean selected = false;
 
@@ -152,7 +153,7 @@ class Cell {
         PVector[] middles = new PVector[nbCotes];
         for (int i=0; i<nbCotes; i++) {
             middles[i] = new PVector(
-                (pos[ i ].x + pos[ (i+1) % nbCotes ].x ) / 2, 
+                (pos[ i ].x + pos[ (i+1) % nbCotes ].x ) / 2,
                 (pos[ i ].y + pos[ (i+1) % nbCotes ].y ) / 2
                 );
             middles[i].mult(amplitude);

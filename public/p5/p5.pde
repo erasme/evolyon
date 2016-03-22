@@ -1,6 +1,7 @@
 int NB_CELLS = 50; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 boolean sleeping = false;
+int frameDrop;
 
 void setup() {
     size(w, h);
@@ -12,6 +13,7 @@ void setup() {
     for (int i=0; i<NB_CELLS; i++) {
         cells.add( getNewCell() );
     }
+    sleepAll();
 }
 
 Cell getNewCell() {
@@ -52,7 +54,7 @@ void draw() {
 
 
         // hit test
-        if (!sleeping) {
+        if (!c.dropped && frameCount > frameDrop+50 ) {
             for (int j=i+1; j<cells.size(); j++) {
                 Cell c2 = cells.get(j);
                 if ( hitTest(c, c2) ) {
@@ -73,34 +75,39 @@ void draw() {
     }
 }
 
-void sleepAwakeAll() {
-    if (sleeping) {
-        for (int i=0; i<cells.size(); i++) {
-            Cell c = cells.get(i);
-            c.drop();
-        }
-        sleeping = false;
-    } else {
-        for (int i=0; i<cells.size(); i++) {
-            Cell c = cells.get(i);
-            c.raise();
-        }
-        sleeping = true;
-    }
+
+void awakeAll() {
+  for (int i=0; i<cells.size(); i++) {
+      Cell c = cells.get(i);
+      c.raise();
+  }
+  frameDrop = frameCount;
+}
+
+void sleepAll() {
+  for (int i=0; i<cells.size(); i++) {
+      Cell c = cells.get(i);
+      c.drop();
+  }
+}
+
+void emitCell() {
+  Cell c = cells.get(int(random(cells.size())));
+  console.log("emitCell")
+  // animate cell
+  socket.emit("emitCell", {
+    "nbCotes" : c.nbCotes,
+    "r" : c.r,
+    "color" : c.couleur
+  }.toString());
 }
 
 void keyPressed() {
   Cell c = cells.get(int(random(cells.size())));
   if (key == 'a') {
     sleepAwakeAll();
-  } else if (key == 'z') {
-    c.kick();
-  } else if (key == 'e') {
-    c.disappear();
-  } else if (key == 't') {
-    c.cellRayon=c.cellRayon+10;
-  } else if (key == ' ') {
-    c.kick();
+  } else if (key == 'm') {
+    emitCell();
   } else if (key == 'w') {
     newTriangle();
   } else if (key == 'x') {
