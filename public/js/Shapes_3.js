@@ -91,9 +91,9 @@ function canvasUpdate() {
 
 function setBounceEffect() {
   navigator.vibrate(20);
-  backgroundOpacity = .5;
+  backgroundOpacity = .2;
   bounceSpeed = 50;
-  triangle.scale = 1.7;
+  triangle.scale = 1.1;
 }
 /*
 function checkForShake() {
