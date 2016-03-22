@@ -14,6 +14,28 @@ var port = process.env.PORT || 3010;
 var path = require('path');
 var config = require( "../config" );
 
+var redisHost = config.redisHost || "127.0.0.1";
+var redisPort = config.redisPort || "6379";
+
+var redis = require("redis");
+var redisClient = redis.createClient(redisPort, redisHost);
+
+redisClient.on('connect', function() {
+    console.log('Redis client connected on '+ redisHost+":"+ redisPort);
+});
+
+// subscribe to redis
+redisClient.subscribe("evolyon");
+redisClient.on("message", function(channel, message){
+  //pop off new item
+  console.log("redis-message");
+  console.log(message);
+
+  io.emit("phoneReady", function(data){
+    console.log(data);
+  })
+  
+});
 
 /*
         ____              __  _

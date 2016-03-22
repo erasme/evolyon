@@ -1,9 +1,9 @@
-int NB_CELLS = 10; // init cell numbers
+int NB_CELLS = 50; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 boolean sleeping = false;
 
 void setup() {
-    size(800, 800);
+    size(w, h);
     noFill();
 
     smooth();

@@ -11,9 +11,18 @@ var app = express();
 var server = require( 'http' ).createServer( app );
 var io = require( 'socket.io' )( server );
 var port = process.env.PORT || 3010;
+var path = require('path');
 
 var config = require( "./config" );
+var redisHost = config.redisHost || "127.0.0.1";
+var redisPort = config.redisPort || "6379";
 
+var redis = require("redis");
+var redisClient = redis.createClient(redisPort, redisHost);
+
+redisClient.on('connect', function() {
+    console.log('Redis client connected on '+ redisHost+":"+ redisPort);
+});
 
 /*
         ____              __  _
@@ -26,12 +35,12 @@ var config = require( "./config" );
 app.use( express.static( __dirname + '/public' ) );
 
 app.get( '/', function( req, res ) {
-    res.sendfile( 'public/single.html' );
+    res.sendFile( path.join(__dirname, 'public', 'single.html') );
 } );
 
 app.get( '/cells/', function( req, res ) {
     // res.send('cell ' + req.params.id);
-    res.sendfile( 'public/cells.html' );
+    res.sendFile( 'public/cells.html' );
 } );
 
 
@@ -55,4 +64,9 @@ io.on( 'connection', function( socket ) {
     socket.on( 'disconnect', function() {
         console.log( "bye !" );
     } );
+
+    socket.on( 'phoneReady', function() {
+        console.log( "phone is ready, yo !" );
+        redisClient.publish("evolyon", "new cell is ready");
+    });
 } );
