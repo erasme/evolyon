@@ -6,21 +6,4 @@ class Square extends Cell {
     void onCollision(Cell targetCell) {
         targetCell.kick();
     }
-
-    void draw() {
-
-        stroke(couleur, 30);
-        strokeWeight(8);
-        polygon(centreX, centreY, 6, rayon, angle, 1, false);
-
-        stroke(couleur, 20);
-        strokeWeight(12);
-        polygon(centreX, centreY, 6, rayon, angle, 1, false);
-        
-    	if( isHit ) fill(couleur, 100);
-        stroke(couleur);
-        strokeWeight(2);
-        polygon(centreX, centreY, 6, rayon, angle, 1, false);
-        if(isHit) noFill();
-    }
 }
