@@ -33,6 +33,9 @@
 
 
 
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/lib/dollar.js"></script>
+	<script type="text/javascript" src="/js/client.js"></script>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script type="text/javascript" src="/lib/p5.js"></script>
 	<!-- // <script type="text/javascript" language="javascript" src="/lib/p5.sound.min.js"></script> -->
@@ -55,6 +58,16 @@
 			});
 
 
+			socket.on( 'newCell', function( data ){
+				console.log("display cell");
+				$("#btnActivate").remove();
+				$("#particle").removeClass('hidden');
+
+				var pjs = Processing.getInstanceById("cells");
+			  start();
+
+			});
+
 			var touchZone = document.getElementsByTagName('html')[0];
 
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
@@ -75,14 +88,13 @@
 				threshold : 10
 			});/* options pour le touch dont la variable est var hammertime*/
 
-			hammertime.on("press", function(ev) {
-				$("#btnActivate").remove();
-				$("#particle").removeClass('hidden');
-
-
-			});/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
+			// hammertime.on("press", function(ev) {
+			//
+			//
+			// });/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
 
 		});
 	</script>
+
 </body>
 </html>

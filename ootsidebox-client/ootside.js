@@ -95,7 +95,7 @@ io.on( 'connection', function( socket ) {
 
     socket.on( 'emitCell', function(data) {
       console.log(data);
-      redisCell.publish("evolyonCell", data.toString());
+      redisCell.publish("evolyonCell", JSON.stringify(data));
     });
 } );
 

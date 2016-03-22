@@ -71,8 +71,9 @@ socket.on( 'mouseUp', function( data ) {
 
 socket.on( 'phoneReady', function( data ){
 	console.log("display cell");
-
 });
+
+
 
 /////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
