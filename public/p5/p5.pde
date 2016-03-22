@@ -1,4 +1,4 @@
-int NB_CELLS = 2; // init cell numbers
+int NB_CELLS = 20; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
 
 void setup() {
@@ -13,12 +13,12 @@ void setup() {
 }
 
 Cell getNewCell(int x, int y) {
-  Cell c = new Cell(x, y, 3, 50, int(random(360)), sin(frameCount/40.)*0.2+1,color(#a184b7));
+  Cell c = new Cell(x, y, int(random(3, 6)), 10, int(random(360)), sin(frameCount/40.)*0.2+1);
   return c;
 }
 
 void draw() {
-  background(0);
+  background(#241f38);
 
   for (int i=0; i<cells.size(); i++) {
     Cell c = cells.get(i);
@@ -28,17 +28,19 @@ void draw() {
       c.move();
     }
 
-    for (int j=0; j<cells.size(); j++) {
-      if(i != j) {
+    for (int j=i+1; j<cells.size(); j++) {
         Cell c2 = cells.get(j);
         if ( hitTest(c, c2) ){
-          println(frameCount, "hhhiiiiiitt");
-        }
+          // println(frameCount, "hhhiiiiiitt");
+          // c.trajectoireX = c.trajectoireX*-1;
+          // c.trajectoireY = c.trajectoireY*-1;
+          // c2.trajectoireX = c2.trajectoireX*-1;
+          // c2.trajectoireY = c2.trajectoireY*-1;
+          // c.kick();
+          // c2.kick();
       }
     }
   }
-
-
 }
 
 boolean dropped = false;

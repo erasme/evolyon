@@ -20,7 +20,7 @@ class Cell {
   color couleur;
 
 
-  Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_, color couleur_) {
+  Cell(int centreX_, int centreY_, int nbCotes_, int rayon_, float angle_, float amplitude_) {
     centreX = centreX_;
     centreY = centreY_;
     nbCotes = nbCotes_;
@@ -33,14 +33,20 @@ class Cell {
     cellEasing = random(0, 0.05);
     easing = cellEasing;
 
-    delay = int(random(5,100));
+    delay = int(random(75,100));
     dropped = false;
 
     // init creation
     appearing = true;
 
-    couleur =couleur_;
-
+    // couleur
+    if(nbCotes_ == 3) {
+      couleur = color(#ff217c);
+    } else if(nbCotes_ == 4) {
+      couleur = color(#a184b7);
+    } else {
+      couleur = color(#0dffe1);
+    }
   }
 
   void drop() {
@@ -53,7 +59,7 @@ class Cell {
 
   boolean kicked = false;
   int originKicked;
-  int kickDuration = 150;
+  int kickDuration = 10;
 
   void kick() {
     originKicked = frameCount;
@@ -76,6 +82,9 @@ class Cell {
       trajectoireX = int(random (rayon, width-rayon));
       trajectoireY = int(random (rayon, height-rayon));
     }
+
+    // trajectoireX = constrain(trajectoireX, 0, width);
+    // trajectoireY = constrain(trajectoireY, 0, height);
 
 
     if (kicked) {
@@ -106,6 +115,7 @@ class Cell {
       centreX  = ease(centreX, trajectoireX, easing );
       centreY = ease(centreY, trajectoireY, easing);
     }
+
 
 
 
@@ -153,3 +163,6 @@ class Cell {
     endShape(CLOSE);
   }
 }
+
+
+class extends Cell {
