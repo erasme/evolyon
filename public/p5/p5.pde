@@ -99,7 +99,7 @@ void emitCell() {
     "nbCotes" : c.nbCotes,
     "r" : c.r,
     "color" : c.couleur
-  }.toString());
+  });
 }
 
 void keyPressed() {

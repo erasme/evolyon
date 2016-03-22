@@ -35,7 +35,7 @@ redisPhone.subscribe("evolyonCell");
 redisPhone.on("message", function(channel, message){
   //pop off new item
   console.log("new cell");
-  console.log(channel,message);
+  console.log(channel, JSON.parse(message));
   phoneReady = true;
 });
 
