@@ -84,9 +84,7 @@ class Cell {
 
     if( dropped == true ){
       trajectoireX = centreX;
-      if ( frameCount % delay  == 0 ) {
-        trajectoireY = int( random(height-rayon, height) );
-      }
+      trajectoireY = int( random(height-rayon, height) );
     } else if ( frameCount % delay  == 0 ) {
       trajectoireX = int(random (rayon, width-rayon));
       trajectoireY = int(random (rayon, height-rayon));
@@ -196,15 +194,15 @@ class Triangle extends Cell {
   void draw() {
     stroke(#ff217c);
     strokeWeight(2);
-    polygon(centreX, centreY, 3, rayon, angle, 1, false);
+    polygon(centreX, centreY, 3, rayon, angle, 1, true);
 
     stroke(#ff217c, 40);
     strokeWeight(5);
-    polygon(centreX, centreY, 3, rayon, angle, 1, false);
+    polygon(centreX, centreY, 3, rayon, angle, 1, true);
 
     stroke(#ff217c, 30);
     strokeWeight(12);
-    polygon(centreX, centreY, 3, rayon, angle, 1, false);
+    polygon(centreX, centreY, 3, rayon, angle, 1, true);
 
   }
 

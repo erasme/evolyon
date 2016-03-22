@@ -1,5 +1,6 @@
 int NB_CELLS = 30; // init cell numbers
 ArrayList<Cell> cells = new ArrayList<Cell>();
+boolean sleeping = false;
 
 void setup() {
   size(500, 500);
@@ -7,6 +8,7 @@ void setup() {
 
   smooth();
 
+  // init cells
   for (int i=0; i<NB_CELLS; i++) {
     cells.add( getNewCell() );
   }
@@ -30,9 +32,7 @@ Cell getNewCell() {
       c=  new Blob(x, y);
       break;
   }
-
   return c;
-
 }
 
 
@@ -42,25 +42,31 @@ void draw() {
   for (int i=0; i<cells.size(); i++) {
     Cell c = cells.get(i);
     boolean newHit = false;
+
     if (c.rayon == 0) { // remove cell if the radius is 0
       cells.remove(i);
     } else {
       c.move();
     }
 
-    for (int j=i+1; j<cells.size(); j++) {
-        Cell c2 = cells.get(j);
-        if ( hitTest(c, c2) ){
-          newHit = true;
-          if(c.isHit) {
-            if(random(1) > .5) {
-              c.onCollision(c2);
-            } else {
-              c2.onCollision(c);
+    println(sleeping);
+
+    // hit test
+    if(!sleeping) {
+      for (int j=i+1; j<cells.size(); j++) {
+          Cell c2 = cells.get(j);
+          if ( hitTest(c, c2) ){
+            newHit = true;
+            if(c.isHit) {
+              if(random(1) > .5) {
+                c.onCollision(c2);
+              } else {
+                c2.onCollision(c);
+              }
             }
-          }
-          c.isHit = true;
-          c2.isHit = true;
+            c.isHit = true;
+            c2.isHit = true;
+        }
       }
     }
     if(!newHit) c.isHit = false;
@@ -69,23 +75,21 @@ void draw() {
   }
 }
 
-boolean dropped = false;
 void sleepAwakeAll() {
-  if (dropped) {
+  if (sleeping) {
     for (int i=0; i<cells.size(); i++) {
       Cell c = cells.get(i);
       c.drop();
     }
-    dropped = false;
+    sleeping = false;
   } else  {
     for (int i=0; i<cells.size(); i++) {
       Cell c = cells.get(i);
       c.raise();
     }
-    dropped = true;
+    sleeping = true;
   }
 }
-
 
 void keyPressed() {
   Cell c = cells.get(int(random(cells.size())));
