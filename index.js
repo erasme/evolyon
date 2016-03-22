@@ -26,7 +26,7 @@ app.get( '/', function( req, res ) {
 
 app.get( '/single/:id', function( req, res ) {
 	// res.send('cell ' + req.params.id);
-	res.sendFile( 'public/single.html' );
+	res.sendfile( 'public/single.html' );
 } );
 
 server.listen( port, function() {
