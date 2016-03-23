@@ -5,6 +5,6 @@ class Triangle extends Cell {
     }
 
     void onCollision(Cell targetCell) {
-	    if(ps.cells.size() < 30) ps.addNewRandomCell(targetCell.location.x, targetCell.location.y);
+	    if(ps.cells.size() < 50) ps.addNewRandomCell(targetCell.location.x, targetCell.location.y);
     }
 }
