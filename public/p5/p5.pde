@@ -22,7 +22,7 @@ void setup() {
 	}
 	
 	gravity = new PVector(0, 0.1);
-	ootsideBox = new PVector(width/2-5, height/2-100);
+	ootsideBox = new PVector(width/2-8, height/2-100);
 	// ps.sleep();
 	ps.awake();
 }
@@ -34,7 +34,7 @@ void draw() {
 
 	ps.run();
 
-	ellipse(ootsideBox.x,ootsideBox.y,ootsideBoxSize,ootsideBoxSize);
+	// ellipse(ootsideBox.x,ootsideBox.y,ootsideBoxSize,ootsideBoxSize);
 }
 
 
