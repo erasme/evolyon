@@ -118,7 +118,6 @@ function getCanvasRect( canvas ) {
 }
 
 // Mouse Events
-
 function mouseDownEvent( x, y ) {
 	_isDown = true;
 	// if ( _points.length > 0 )

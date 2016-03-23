@@ -4,29 +4,30 @@ int NB_CELLS = 10; // init cell numbers
 // int frameDrop;
 ParticleSystem ps;
 
+PVector gravity = new PVector(0, 0.1);
+
 void setup() {
 	size(w, h);
+
 	noFill();
-
 	smooth();
-	ps = new ParticleSystem();
+	noCursor();
 
+	ps = new ParticleSystem();
 	// init cells
 	for (int i=0; i<NB_CELLS; i++) {
 		ps.addNewRandomCell(random(width), random(height));
 	}
-
+	
+	gravity = new PVector(0, 0.1);
 	// ps.sleep();
+	ps.awake();
 }
 
 
 
 void draw() {
 	background(#241f38);
-
-	// Apply gravity force to all Particles
-	// PVector gravity = new PVector(0,0.1);
-	// ps.applyForce(gravity);
 
 	ps.run();
 }
@@ -35,14 +36,15 @@ void draw() {
 
 void emitCell() {
 	console.log("emitCell");
-	// Cell c = cells.get(int(random(cells.size())));
-	// c.selected = true;
+	ps.selectCell();
 }
 
 void keyPressed() {
-	Cell c = cells.get(int(random(cells.size())));
-	if (key == 'a') {
-		// sleepAwakeAll();
+	if (key == 's') {
+		ps.sleep();
+	} 
+	else if (key == 'a') {
+		ps.awake();
 	} else if (key == 'm') {
 		emitCell();
 	} else if (key == 'w') {
@@ -82,15 +84,6 @@ void split(){
 float squareDist(Cell c1, Cell c2) {
 	return (c1.centre.x - c2.centre.x)*(c1.centre.x - c2.centre.x) + (c1.centre.y - c2.centre.y)*(c1.centre.y - c2.centre.y);
 }
-
-/*boolean hitTest(Cell c1, Cell c2) {
-	// println(squareDist(c1, c2), c1.rayon*c2.rayon);
-	if (squareDist(c1, c2) < (c1.rayon*1.8)*(c2.rayon*1.8) ){
-		return true;
-	} else {
-		return false;
-	}
-}*/
 
 float ease(float value, float target, float easingVal) {
 	float d = target - value;
