@@ -49,9 +49,7 @@ function Triangle(_nbCotes, _couleur, _rayon) {
   	this.ay = rotationY;
 
   	this.vx = this.vx + this.ay + accelerationY*2;
-  	this.vx = min( this.vx, 10);
   	this.vy = this.vy + this.ax + accelerationX*2;
-  	this.vy = min( this.vy, 10);
 
   	this.y = this.y + this.vy * this.vMultiplier;
   	this.x = this.x + this.vx * this.vMultiplier;
