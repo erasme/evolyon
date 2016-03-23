@@ -2,10 +2,12 @@ final static float SPEED = 0.001;
 final static int RADIUS_MAX = 30;
 
 class Cell {
-    float centreX;
-    float centreY;
-    float targetX;
-    float targetY;
+	PVector centre;
+    // float centreX;
+    // float centreY;
+    PVector target;
+    // float targetX;
+    // float targetY;
     int nbCotes;
     int rayon;
     float angle, tarAngle = 0;
@@ -31,8 +33,9 @@ class Cell {
     }
 
     Cell(float centreX_, float centreY_, int nbCotes_, float angle_, float amplitude_) {
-        centreX = centreX_;
-        centreY = centreY_;
+        // centreX = centreX_;
+        // centreY = centreY_;
+        centre = new PVector( centreX_, centreY_ );
         nbCotes = nbCotes_;
         rayon = int( random(15, RADIUS_MAX));
         angle = angle_;
@@ -57,8 +60,9 @@ class Cell {
         } else {
             couleur = color(#a184b7);
         }
-        targetX = int(random (rayon, width-rayon));
-        targetY = int(random (rayon, height-rayon));
+        // targetX = int(random (rayon, width-rayon));
+        // targetY = int(random (rayon, height-rayon));
+        target = new PVector(random (rayon, width-rayon), random (rayon, height-rayon) );
     }
 
     void drop() {
@@ -86,11 +90,15 @@ class Cell {
 
     void move() {
     	if( selected ){
-    		targetX = width/2;
-    		targetY = height/2;
+    		// targetX = width/2;
+    		// targetY = height/2;
+    		target.x = width/2;
+    		target.y = height/2;
 
-            centreX = ease(centreX, targetX, 0.01);
-            centreY = ease(centreY, targetY, 0.01);
+            // centreX = ease(centreX, targetX, 0.01);
+            // centreY = ease(centreY, targetY, 0.01);
+            centre.x = ease(centreX, targetX, 0.01);
+            centre.y = ease(centreY, targetY, 0.01);
 
             rayon = max( ++rayon, 70 );
             if( frameCount % 25 ) tarAngle = random(360);
@@ -100,23 +108,23 @@ class Cell {
             if( selectedTime > 300 ){
             	rayon = 0;
 
-				socket.emit("emitCell", {
+				/*socket.emit("emitCell", {
 					"nbCotes" : c.nbCotes,
 					"r" : c.r,
 					"color" : c.couleur
-				});
+				});*/
             }
 		}
 		else{
 	        if ( dropped == true ) {
 	            targetY = int( random(height-rayon, height) );
 	        } else if ( frameCount % delay  == 0 ) {
-	            targetX = random (rayon, width-rayon);
-	            targetY = random (rayon, height-rayon);
+	            target.x = random (rayon, width-rayon);
+	            target.y = random (rayon, height-rayon);
 	        }
 
-	        targetX = constrain(targetX, rayon, width-rayon);
-	        targetY = constrain(targetY, rayon, height-rayon);
+	        target.x = constrain(target.x, rayon, width-rayon);
+	        target.y = constrain(target.y, rayon, height-rayon);
 
 
 	        if (kicked) {
@@ -142,8 +150,8 @@ class Cell {
 
 	        if (disappearing || appearing) {
 	        } else {
-	            centreX = ease(centreX, targetX, easing );
-	            centreY = ease(centreY, targetY, easing);
+	            centre.x = ease(centre.x, target.x, easing );
+	            centre.y = ease(centre.y, target.y, easing);
 	        }
 	    }
     }
@@ -157,18 +165,18 @@ class Cell {
     void draw() {
         stroke(couleur, 30);
         strokeWeight(8);
-        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
+        polygon(centre, nbCotes, rayon, angle, 1, false);
 
         stroke(couleur, 20);
         strokeWeight(12);
-        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
+        polygon(centre, nbCotes, rayon, angle, 1, false);
         
         stroke(couleur);
         strokeWeight(2);
-        polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
+        polygon(centre, nbCotes, rayon, angle, 1, false);
     }
 
-    void polygon(float centreX, float centreY, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {
+    void polygon(PVector centre, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {
         PVector[] pos = new PVector[nbCotes];
         for (int i=0; i<nbCotes; i++) {
             pos[i] = new PVector( cos(radians(angle + 360./nbCotes * i)) * radius, sin(radians(angle + 360./nbCotes * i)) * radius);
@@ -187,16 +195,16 @@ class Cell {
         beginShape();
         for (int i=0; i<nbCotes; i++) {
             if (bordRond) {
-                curveVertex(centreX+pos[i].x, centreY+pos[i].y);
-                curveVertex(centreX+middles[i].x, centreY+middles[i].y);
+                curveVertex(centre.x+pos[i].x, centre.y+pos[i].y);
+                curveVertex(centre.x+middles[i].x, centre.y+middles[i].y);
 
                 if (i == nbCotes-1) {
-                    curveVertex(centreX+pos[0].x, centreY+pos[0].y);
-                    curveVertex(centreX+middles[0].x, centreY+middles[0].y);
+                    curveVertex(centre.x+pos[0].x, centreY+pos[0].y);
+                    curveVertex(centre.x+middles[0].x, centreY+middles[0].y);
                 }
             } else {
-                vertex(centreX+pos[i].x, centreY+pos[i].y);
-                vertex(centreX+middles[i].x, centreY+middles[i].y);
+                vertex(centre.x+pos[i].x, centreY+pos[i].y);
+                vertex(centre.x+middles[i].x, centreY+middles[i].y);
             }
         }
         endShape(CLOSE);
@@ -204,4 +212,4 @@ class Cell {
 
     void onCollision(Cell targetCell) {
     }
-}
+};

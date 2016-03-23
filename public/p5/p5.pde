@@ -137,7 +137,7 @@ void split(){
 }
 
 float squareDist(Cell c1, Cell c2) {
-    return (c1.centreX - c2.centreX)*(c1.centreX - c2.centreX) + (c1.centreY - c2.centreY)*(c1.centreY - c2.centreY);
+    return (c1.centre.x - c2.centre.x)*(c1.centre.x - c2.centre.x) + (c1.centre.y - c2.centre.y)*(c1.centre.y - c2.centre.y);
 }
 
 boolean hitTest(Cell c1, Cell c2) {
