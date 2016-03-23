@@ -6,6 +6,7 @@ ParticleSystem ps;
 
 PVector gravity;
 PVector ootsideBox;
+int ootsideBoxSize = 150;
 
 void setup() {
 	size(w, h);
@@ -21,7 +22,7 @@ void setup() {
 	}
 	
 	gravity = new PVector(0, 0.1);
-	ootsideBox = new PVector(width/2, height/2-80);
+	ootsideBox = new PVector(width/2, height/2-100);
 	// ps.sleep();
 	ps.awake();
 }
@@ -33,7 +34,7 @@ void draw() {
 
 	ps.run();
 
-	ellipse(width/2,height/2-80,130,130);
+	ellipse(ootsideBox.x,ootsideBox.y,ootsideBoxSize,ootsideBoxSize);
 }
 
 
