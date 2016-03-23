@@ -42,9 +42,6 @@ function Triangle(_nbCotes, _couleur, _rayon) {
       this.rotate = 0;
     }
 
-  //  this.x += this.xspeed * this.direction;
-  //  this.y += this.yspeed * this.direction;
-
     this.ax = rotationX;
   	this.ay = rotationY;
 

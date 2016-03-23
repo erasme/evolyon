@@ -30,6 +30,7 @@ socket.on( 'connect', function( data ) {
 socket.on( 'presence', function( data ) {
 	console.log( 'presence:', data.presence );
 	var pjs = Processing.getInstanceById( "cells" );
+	pjs.presence();
 	if ( data.presence ) {
 		// pjs.awakeAll();
 	} else {
