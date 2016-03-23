@@ -270,7 +270,7 @@ ootsidebox.on( 'data', function( data, err ) {
     // emit if event has changed
     if ( currentEvent && ( currentEvent != prevEvent ) ) {
         io.emit( currentEvent, normedGesture );
-        console.log( currentEvent );
+        // console.log( currentEvent );
     } else if ( currentEvent && Date.now() - prevTime > minTimeDiffBetweenEvents ) {
         io.emit( currentEvent, normedGesture );
         console.log( currentEvent );
