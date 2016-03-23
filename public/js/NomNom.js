@@ -1,3 +1,18 @@
+var colorsNomNom = [
+  "255,119,87",
+  "255,194,95",
+  "255,255,255",
+  "247,105,136",
+  "190,183,196",
+  "234,181,244"
+];
+
+// 13,255,255
+// 161,132,183
+
+
+
+
 function NomNom(i) {
 
   this.i = i;
@@ -17,12 +32,14 @@ function NomNom(i) {
     this.found = false;
     this.opacity = 1;
     this.alive = true;
+    this.color = colorsNomNom[parseInt(Math.random()*(colorsNomNom.length-1))];
   }
   
   this.update = function() {
     if (this.alive) {
       if (this.isCollidingWithTriangle() == true) {
         this.found = true;
+        triangle.color = this.color;
       }
       
       if (this.found) {
@@ -45,7 +62,7 @@ function NomNom(i) {
       translate(this.x, this.y);
       scale(this.scale * (sin(frameCount*bounceSpeed/60.)*0.2+1), this.scale * (sin(frameCount*bounceSpeed/60.)*0.2+1));
         
-      fill('rgba(255,255,255,'+this.opacity+')');     
+      fill('rgba('+this.color+','+this.opacity+')');     
       
       
       noStroke();

@@ -17,13 +17,15 @@ var isLoaded = false;
 function setup() {
   var canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.parent('particle');
-  triangle = new Triangle(4);
+  triangle = new Triangle(4,"255,33,124",50);
 
   for (var i = 0; i <= 5; i++) {
     newNomNom();
   }
 
   smooth();
+  
+  console.log('setup() ok');
 }
 
 function start() {

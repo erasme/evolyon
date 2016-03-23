@@ -24,7 +24,7 @@ function Triangle(_nbCotes, _couleur, _rayon) {
 
 
   this.nbCotes = _nbCotes;
-  this.color = _couleur;
+  this.color = _couleur || "255,33,124";
   this.r = _rayon;
 
 
@@ -87,16 +87,20 @@ function Triangle(_nbCotes, _couleur, _rayon) {
     rotate(this.rotate);
     angleMode(RADIANS);
     scale(this.scale, this.scale);
+    
+    
 
-    stroke('rgb(255,33,124)');
-    strokeWeight(3);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, (sin(frameCount*bounceSpeed/60.)*0.2+1) );
-    stroke('rgba(255,33,124,.3)');
+    stroke('rgb('+this.color+')'); // Demander à avoir les couleurs en "xxx,xxx,xxx" pour ajouter alpha ensuite
+    strokeWeight(3);    
+    polygon(random(-1, 1), random(-1, 1), 3, this.r, -90, (sin(frameCount*bounceSpeed/60.)*0.2+1) );
+    
+    stroke('rgba('+this.color+',.3)');
     strokeWeight(10);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
-    stroke('rgba(255,33,124,.2)');
+    polygon(random(-1, 1), random(-1, 1), 3, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
+    
+    stroke('rgba('+this.color+',.2)');
     strokeWeight(20);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
+    polygon(random(-1, 1), random(-1, 1), 3, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
 
     pop();
   }
