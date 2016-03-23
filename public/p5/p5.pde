@@ -1,96 +1,37 @@
-int NB_CELLS = 100; // init cell numbers
-ArrayList<Cell> cells = new ArrayList<Cell>();
-boolean sleeping = false;
-int frameDrop;
+int NB_CELLS = 10; // init cell numbers
+//ArrayList<Cell> cells = new ArrayList<Cell>();
+// boolean sleeping = false;
+// int frameDrop;
+ParticleSystem ps;
 
 void setup() {
 	size(w, h);
 	noFill();
 
 	smooth();
+	ps = new ParticleSystem();
 
 	// init cells
 	for (int i=0; i<NB_CELLS; i++) {
-		cells.add( getNewCell() );
+		ps.addNewRandomCell(random(width), random(height));
 	}
-	sleepAll();
+
+	// ps.sleep();
 }
 
-Cell getNewCell() {
-	float x = random(0, width);
-	float y = random(0, height);
-
-	Cell c = new Cell();
-	int cellType = int(random(3));
-
-	switch(cellType) {
-	case 0 :
-		c = new Triangle(x, y);
-		break;
-	case 1 :
-		c = new Square(x, y);
-		break;
-	case 2 :
-		c = new Blob(x, y);
-		break;
-	}
-	return c;
-}
 
 
 void draw() {
 	background(#241f38);
 
-	for (int i=0; i<cells.size(); i++) {
-		Cell c = cells.get(i);
-		boolean newHit = false;
+	// Apply gravity force to all Particles
+	// PVector gravity = new PVector(0,0.1);
+	// ps.applyForce(gravity);
 
-		if (c.rayon == 0) { // remove cell if the radius is 0
-			cells.remove(i);
-		} else {
-			c.move();
-			c.draw();
-		}
-
-		/*
-		// hit test
-		if (!c.selected && !c.dropped && frameCount > frameDrop+50 ) {
-			for (int j=i+1; j<cells.size(); j++) {
-				Cell c2 = cells.get(j);
-				if ( !c2.selected && hitTest(c, c2) ) {
-					newHit = true;
-					if (c.isHit) {
-						if (random(1) > .5) {
-							c.onCollision(c2);
-						} else {
-							c2.onCollision(c);
-						}
-					}
-					c.isHit = true;
-					c2.isHit = true;
-				}
-			}
-		}
-		if (!newHit) c.isHit = false;
-		*/
-	}
+	ps.run();
 }
 
 
-void awakeAll() {
-  for (int i=0; i<cells.size(); i++) {
-	  Cell c = cells.get(i);
-	  c.raise();
-  }
-  frameDrop = frameCount;
-}
-
-void sleepAll() {
-	for (int i=0; i<cells.size(); i++) {
-		Cell c = cells.get(i);
-		c.drop();
-	}
-}
 
 void emitCell() {
 	// console.log("emitCell");
@@ -101,7 +42,7 @@ void emitCell() {
 void keyPressed() {
 	Cell c = cells.get(int(random(cells.size())));
 	if (key == 'a') {
-		sleepAwakeAll();
+		// sleepAwakeAll();
 	} else if (key == 'm') {
 		emitCell();
 	} else if (key == 'w') {
@@ -135,18 +76,25 @@ void newSquare() {
 }
 
 void split(){
-	cells.add( getNewCell() );
+	ps.addNewRandomCell(random(width), random(height));
 }
 
 float squareDist(Cell c1, Cell c2) {
 	return (c1.centre.x - c2.centre.x)*(c1.centre.x - c2.centre.x) + (c1.centre.y - c2.centre.y)*(c1.centre.y - c2.centre.y);
 }
 
-boolean hitTest(Cell c1, Cell c2) {
+/*boolean hitTest(Cell c1, Cell c2) {
 	// println(squareDist(c1, c2), c1.rayon*c2.rayon);
 	if (squareDist(c1, c2) < (c1.rayon*1.8)*(c2.rayon*1.8) ){
 		return true;
 	} else {
 		return false;
 	}
+}*/
+
+float ease(float value, float target, float easingVal) {
+	float d = target - value;
+	if (abs(d)>1) value+= d*easingVal;
+	else value = target;
+	return value;
 }

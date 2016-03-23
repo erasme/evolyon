@@ -4,8 +4,8 @@ class Blob extends Cell {
     }
 
     void onCollision(Cell targetCell) {
-        if (random(1) < 0.05) {
-            split();
+        if (ps.cells.size() > 20) {
+        	targetCell.disappear();
         }
     }
 }

@@ -2,13 +2,17 @@ final static float SPEED = 0.001;
 final static int RADIUS_MAX = 10;
 
 class Cell {
-	PVector centre;
-	PVector target;
-	PVector speed;
+	PVector location;
+	PVector velocity;
+    PVector acceleration;
+    float topspeed;
+    float mass = 1;
+	// PVector target;
 
 	int nbCotes;
-	int cellRayon;
-	int rayon;
+	float cellRayon;
+	float rayon;
+	float tarRayon;
 	float cellEasing; // backup the values
 	float easing;
 	float angle, tarAngle = 0;
@@ -20,24 +24,29 @@ class Cell {
 	boolean selected = false;
 	int selectedTime = 0;
 	boolean appearing;
-	boolean isHit = true;
+	boolean colliding = true;
+	boolean isColliding = true;
 
 
 	Cell() {}
 
-	Cell(float centreX_, float centreY_, int nbCotes_, float angle_, float amplitude_) {
-		centre = new PVector( centreX_, centreY_ );
-		target = new PVector(random (rayon, width-rayon), random (rayon, height-rayon) );
+	Cell(float locationX_, float locationY_, int nbCotes_, float angle_, float amplitude_) {
+		location = new PVector( locationX_, locationY_ );
+        acceleration = new PVector(random(1, 5), random(1,5));
+        velocity = new PVector(0, 0);
+		// target = new PVector(random (rayon, width-rayon), random (rayon, height-rayon) );
+
 		nbCotes = nbCotes_;
+		topspeed = (nbCotes == 3) ? 3 : 
+					(nbCotes == 4) ? 1 : 
+					1.5; 
 		rayon = int( random(15, RADIUS_MAX));
+		tarRayon = rayon;
+		cellRayon = rayon;
 		angle = angle_;
 		amplitude = amplitude_;
-
-		cellRayon = rayon;
-
 		cellEasing = random(0, SPEED);
 		easing = cellEasing;
-
 		delay = int(random(75, 100));
 		dropped = false;
 
@@ -48,16 +57,15 @@ class Cell {
 		if (nbCotes_ == 3) couleur = #ff217c;
 		else if (nbCotes_ == 4) couleur = #0dffe1;
 		else couleur = #a184b7;
-
 	}
 
-	void drop() {
+	/*void drop() {
 		dropped = true;
 	}
 
 	void raise() {
 		dropped = false;
-	}
+	}*/
 
 	boolean kicked = false;
 	int originKicked;
@@ -67,23 +75,34 @@ class Cell {
 		kicked = true;
 	}
 
-	boolean disappearing = false;
 	void disappear() {
-		disappearing = true;
+		tarRayon = 0;
 	}
 
-	void move() {
+	void applyForce(PVector force) {
+		PVector f = PVector.div(force,mass);
+		acceleration.add(f);
+	}
+
+	void update() {
+        /*if( frameCount % (delay*3) == 0 ) {
+            acceleration = PVector.random2D();
+            acceleration.mult(random(2));
+        }*/
+
+        velocity.add(acceleration);
+        velocity.limit(topspeed);
+        location.add(velocity);
+
+        rayon = ease(rayon, tarRayon, 0.05);
+        checkBoundaries();
 		
 		/*if( selected ){
-			// targetX = width/2;
-			// targetY = height/2;
 			target.x = width/2;
 			target.y = height/2;
 
-			// centreX = ease(centreX, targetX, 0.01);
-			// centreY = ease(centreY, targetY, 0.01);
-			centre.x = ease(centre.x, target.x, 0.01);
-			centre.y = ease(centre.y, target.y, 0.01);
+			location.x = ease(location.x, target.x, 0.01);
+			location.y = ease(location.y, target.y, 0.01);
 
 			rayon = max( ++rayon, 70 );
 			if( frameCount % 25 ) tarAngle = random(360);
@@ -135,42 +154,71 @@ class Cell {
 
 			if (disappearing || appearing) {
 			} else {
-				centre.x = ease(centre.x, target.x, easing );
-				centre.y = ease(centre.y, target.y, easing);
+				location.x = ease(location.x, target.x, easing );
+				location.y = ease(location.y, target.y, easing);
 			}
 		}*/
 	}
 
-	float ease(float value, float target, float easingVal) {
-		float d = target - value;
-		if (abs(d)>1) value+= d*easingVal;
-		return value;
-	}
 
-	void bounce(){
-        if ((centre.x > width) || (centre.x < 0)) {
-            velocity.x = velocity.x * -1;
+	void checkBoundaries(){
+        if ((location.x > width-cellRayon) || (location.x < cellRayon)) {
+            location.x = constrain( location.x, cellRayon+1, width-cellRayon-1 );
+            acceleration.x = acceleration.x * -1;
         }
-        if ((centre.y > height) || (centre.y < 0)) {
-            velocity.y = velocity.y * -1;
+        if ((location.y > height-cellRayon) || (location.y < cellRayon)) {
+            location.y = constrain( location.y, cellRayon+1, height-cellRayon-1 );
+            acceleration.y = acceleration.y * -1;
         }
 	}
 
-	void draw() {
+	boolean collideEqualMass(Cell other) {
+		float d = PVector.dist(location, other.location);
+		float sumR = rayon + other.rayon;
+
+		if (!colliding && d < sumR) {
+			colliding = true;
+			// Direction of one object another
+			PVector n = PVector.sub(other.location, location);
+			n.normalize();
+
+			// Difference of velocities so that we think of one object as stationary
+			PVector u = PVector.sub(acceleration,other.acceleration);
+
+			// Separate out components -- one in direction of normal
+			PVector un = componentVector(u,n);
+			// Other component
+			u.sub(un);
+			// These are the new velocities plus the velocity of the object we consider as stastionary
+			acceleration = PVector.add(u,other.acceleration);
+			other.acceleration = PVector.add(un,other.acceleration);
+
+			if (random(1) > .5) {
+				onCollision(other);
+			} else {
+				other.onCollision(this);
+			}
+		} 
+		else if (d > sumR) {
+			colliding = false;
+		}
+	}
+
+	void display() {
 		stroke(couleur, 20);
 		strokeWeight(12);
-		polygon(centre, nbCotes, rayon, angle, 1, false);
+		polygon(location, nbCotes, rayon, angle, 1, false);
 
 		stroke(couleur, 30);
 		strokeWeight(8);
-		polygon(centre, nbCotes, rayon, angle, 1, false);
+		polygon(location, nbCotes, rayon, angle, 1, false);
 		
 		stroke(couleur);
 		strokeWeight(2);
-		polygon(centre, nbCotes, rayon, angle, 1, false);
+		polygon(location, nbCotes, rayon, angle, 1, false);
 	}
 
-	void polygon(PVector centre, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {
+	void polygon(PVector location, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {
 		PVector[] pos = new PVector[nbCotes];
 		for (int i=0; i<nbCotes; i++) {
 			pos[i] = new PVector( cos(radians(angle + 360./nbCotes * i)) * radius, sin(radians(angle + 360./nbCotes * i)) * radius);
@@ -189,21 +237,44 @@ class Cell {
 		beginShape();
 		for (int i=0; i<nbCotes; i++) {
 			if (bordRond) {
-				curveVertex(centre.x+pos[i].x, centre.y+pos[i].y);
-				curveVertex(centre.x+middles[i].x, centre.y+middles[i].y);
+				curveVertex(location.x+pos[i].x, location.y+pos[i].y);
+				curveVertex(location.x+middles[i].x, location.y+middles[i].y);
 
 				if (i == nbCotes-1) {
-					curveVertex(centre.x+pos[0].x, centre.y+pos[0].y);
-					curveVertex(centre.x+middles[0].x, centre.y+middles[0].y);
+					curveVertex(location.x+pos[0].x, location.y+pos[0].y);
+					curveVertex(location.x+middles[0].x, location.y+middles[0].y);
 				}
 			} else {
-				vertex(centre.x+pos[i].x, centre.y+pos[i].y);
-				vertex(centre.x+middles[i].x, centre.y+middles[i].y);
+				vertex(location.x+pos[i].x, location.y+pos[i].y);
+				vertex(location.x+middles[i].x, location.y+middles[i].y);
 			}
 		}
 		endShape(CLOSE);
 	}
 
+	void run() {
+		update();
+		display();
+	}
+
+	boolean isDead() {
+		if (rayon < 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	void onCollision(Cell targetCell) {
 	}
 };
+
+
+PVector componentVector (PVector vector, PVector directionVector) {
+	//--! ARGUMENTS: vector, directionVector (2D vectors)
+	//--! RETURNS: the component vector of vector in the direction directionVector
+	//-- normalize directionVector
+	directionVector.normalize();
+	directionVector.mult(vector.dot(directionVector));
+	return directionVector;
+}
