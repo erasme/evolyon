@@ -57,7 +57,7 @@ app.get( '/', function( req, res ) {
 
 app.get( '/cells/', function( req, res ) {
     // res.send('cell ' + req.params.id);
-    res.sendFile( 'public/cells.html' );
+    res.sendFile( path.join(__dirname, 'public', 'cells.html') );
 } );
 
 

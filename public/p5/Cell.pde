@@ -1,5 +1,5 @@
 final static float SPEED = 0.001;
-final static int RADIUS_MAX = 30;
+final static int RADIUS_MAX = 10;
 
 class Cell {
     float centreX;
@@ -55,7 +55,7 @@ class Cell {
         } else if (nbCotes_ == 4) {
             couleur = color(#0dffe1);
         } else {
-            couleur = color(#a184b7);
+            couleur = color(#0da3e1);
         }
         targetX = int(random (rayon, width-rayon));
         targetY = int(random (rayon, height-rayon));
@@ -92,7 +92,7 @@ class Cell {
             centreX = ease(centreX, targetX, 0.01);
             centreY = ease(centreY, targetY, 0.01);
 
-            rayon = max( ++rayon, 70 );
+            rayon = min( ++rayon, 50 );
             if( frameCount % 25 ) tarAngle = random(360);
             angle = ease(angle, tarAngle, 0.1);
 
@@ -100,11 +100,11 @@ class Cell {
             if( selectedTime > 300 ){
             	rayon = 0;
 
-				socket.emit("emitCell", {
-					"nbCotes" : c.nbCotes,
-					"r" : c.r,
-					"color" : c.couleur
-				});
+    				socket.emit("emitCell", {
+    					"nbCotes" : nbCotes,
+    					"r" : rayon,
+    					"color" : [red(couleur), green(couleur), blue(couleur)]
+    				});
             }
 		}
 		else{
@@ -155,6 +155,7 @@ class Cell {
     }
 
     void draw() {
+        fill(couleur);
         stroke(couleur, 30);
         strokeWeight(8);
         polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
@@ -162,7 +163,7 @@ class Cell {
         stroke(couleur, 20);
         strokeWeight(12);
         polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);
-        
+
         stroke(couleur);
         strokeWeight(2);
         polygon(centreX, centreY, nbCotes, rayon, angle, 1, false);

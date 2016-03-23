@@ -1,4 +1,4 @@
-function Triangle(_nbCotes) {
+function Triangle(_nbCotes, _couleur, _rayon) {
 
   // Speed - Velocity
   this.vx = 0;
@@ -23,7 +23,9 @@ function Triangle(_nbCotes) {
   this.scale = 1;
 
 
-  this.nbCotes = _nbCotes
+  this.nbCotes = _nbCotes;
+  this.color = _couleur;
+  this.r = _rayon;
 
 
   this.update = function(event) {
@@ -88,13 +90,13 @@ function Triangle(_nbCotes) {
 
     stroke('rgb(255,33,124)');
     strokeWeight(3);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, 50, -90, (sin(frameCount*bounceSpeed/60.)*0.2+1) );
+    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, (sin(frameCount*bounceSpeed/60.)*0.2+1) );
     stroke('rgba(255,33,124,.3)');
     strokeWeight(10);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, 50, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
+    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
     stroke('rgba(255,33,124,.2)');
     strokeWeight(20);
-    polygon(random(-1, 1), random(-1, 1), this.nbCotes, 50, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
+    polygon(random(-1, 1), random(-1, 1), this.nbCotes, this.r, -90, sin(frameCount*bounceSpeed/60.)*0.2+1);
 
     pop();
   }
