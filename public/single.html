@@ -59,16 +59,8 @@
 
 
 			socket.on( 'newCell', function( data ){
-				console.log("display cell");
-				$("#btnActivate").remove();
-				$("#particle").removeClass('hidden');
-
-				var pjs = Processing.getInstanceById("cells");
-			  start();
-				console.log(data);
-				triangle.nbCotes = data.nbCotes;
-				
-
+				console.log(data)
+  			mobileGetCell(data);
 			});
 
 			var touchZone = document.getElementsByTagName('html')[0];
@@ -96,7 +88,20 @@
 			//
 			// });/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
 
+
+      function mobileGetCell(data) {
+  			console.log("display cell");
+				$("#btnActivate").remove();
+				$("#particle").removeClass('hidden');
+
+				var pjs = Processing.getInstanceById("cells");
+			  start();
+				console.log(data);
+				triangle.nbCotes = data.nbCotes;
+			}
+
 		});
+
 	</script>
 
 </body>

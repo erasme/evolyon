@@ -1,0 +1,55 @@
+#! /bin/bash
+
+OOTSIDE_PORT=5000
+WEB_PORT=3010
+# CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# parentdir="$(dirname "$CURRENT_DIR")"
+# parentdir=/home/erasme/www/erasme
+parentdir=/home/clemsos/Dev/erasme
+
+function init {
+  mkdir -p $parentdir/log
+  mkdir -p $parentdir/ootside_run
+  mkdir -p $parentdir/evolyon_run
+}
+
+function ootside_start {
+  export OOTSIDE_PORT=$OOTSIDE_PORT && forever start -o $parentdir/log/ootsidebox.out.log -e $parentdir/log/ootsidebox.error.log -a $parentdir/evolyon/ootsidebox-client/ootside.js -p $parentdir/ootside_run
+}
+
+function ootside_stop {
+  forever stop -l $OOTSIDE_PORT -a $parentdir/evolyon/ootsidebox-client/ootside.js -p $parentdir/ootside_run
+}
+
+function web_start {
+  export WEB_PORT=$WEB_PORT && forever start -o $parentdir/log/evolyon.out.log -e $parentdir/log/evolyon.error.log -a $parentdir/evolyon/index.js -p $parentdir/evolyon_run
+}
+
+function web_stop {
+  forever stop -l $WEB_PORT -a $parentdir/evolyon/index.js -p $parentdir/evolyon_run
+}
+
+case "$1" in
+ init)
+  init
+  ;;
+ start)
+    web_start
+    ootside_start
+   ;;
+ stop)
+    web_stop
+    ootside_stop
+   ;;
+ restart)
+   ootside_stop
+   ootside_start
+
+   web_stop
+   web_start
+   ;;
+ *)
+   echo "Usage: evolyon {init|start|stop|restart}" >&2
+   exit 3
+   ;;
+esac
