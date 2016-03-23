@@ -3,7 +3,7 @@ document.body.style.height = window.innerHeight + 'px';
 // size of the abribus
 var abribus = {
 	"height": 120,
-	"width": 176
+	"width": 172
 };
 
 var h = window.innerHeight;
