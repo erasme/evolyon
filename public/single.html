@@ -64,10 +64,12 @@
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
 			hammertime2.on("press",function(ev){
         console.log("j'ai appuyé");
+        $('.chargement').removeClass('hidden');
 			});
 
 			hammertime2.on("pressup", function(ev) {
-					console.log("pressUp")
+					console.log("pressUp");
+          $('.chargement').addClass('hidden');
 					socket.emit( 'phoneReady');
 			});/* je touche plus donc je cache le chargement*/
 
