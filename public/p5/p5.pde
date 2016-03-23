@@ -30,6 +30,8 @@ void draw() {
 	background(#241f38);
 
 	ps.run();
+
+	ellipse(width/2,height/2,100,100);
 }
 
 

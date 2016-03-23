@@ -25,6 +25,7 @@ class Cell {
 	int selectedTime = 0;
 
 	boolean sleeping = false;
+	boolean hitting = false;
 
 
 	Cell() {}
@@ -33,7 +34,6 @@ class Cell {
 		location = new PVector( locationX_, locationY_ );
         acceleration = new PVector(random(1, 5), random(1,5));
         velocity = new PVector(0, 0);
-		// target = new PVector(random (rayon, width-rayon), random (rayon, height-rayon) );
 
 		nbCotes = nbCotes_;
 		maxspeed = (nbCotes == 3) ? 3 : 
@@ -77,28 +77,11 @@ class Cell {
 		acceleration.add(f);
 	}
 
-	/*
-	void update() {
-		else{
-			if( frameCount % (delay*3) == 0 ) {
-	            acceleration = PVector.random2D();
-	            acceleration.mult(random(2));
-	        }
-
-	        velocity.add(acceleration);
-	        velocity.limit(maxspeed);
-	        location.add(velocity);
-
-	        rayon = ease(rayon, tarRayon, 0.05);
-	        checkBoundaries();
-		}
-	}*/
-
 	boolean once = true;
     void update() {
         if (selected) {
         	location.x = ease(location.x, width/2, 0.05);
-			location.y = ease(location.y, height/2, 0.05);
+			location.y = ease(location.y, height/4, 0.05);
 	        rayon = ease(rayon, tarRayon, 0.05);
 			if( frameCount % 25 ) tarAngle = random(360);
 			angle = ease(angle, tarAngle, 0.1);
@@ -143,6 +126,20 @@ class Cell {
         PVector sum = new PVector();
         int count = 0;
 
+        //Collide with center
+        /*float d1 = PVector.dist(location, new PVector(width/2, height/2));
+        if ((d1 > 0) && (d1 < rayon + 100)) {
+            // Calculate vector pointing away from neighbor
+            PVector diff = PVector.sub(location, new PVector(width/2, height/2));
+            diff.normalize();
+            diff.div(d);        // Weight by distance
+            sum.add(diff);
+            count++;            // Keep track of how many
+    		
+    		hitting = true;
+        }
+*/
+
         for (Cell other : cells) {
             float d = PVector.dist(location, other.location);
             if ((d > 0) && (d < rayon + other.rayon)) {
@@ -152,6 +149,18 @@ class Cell {
                 diff.div(d);        // Weight by distance
                 sum.add(diff);
                 count++;            // Keep track of how many
+        		
+        		hitting = true;
+        		if(!other.hitting){
+        			if(random(1)>.5){
+        				onCollision(other);
+        			}
+        			else{
+        				other.onCollision(this);
+        			}
+        			other.hitting = true;
+        		}
+
             }
         }
         // Average -- divide by how many
@@ -163,20 +172,23 @@ class Cell {
             steer.limit(maxforce);
             applyForce(steer);
         }
+        else{
+        	hitting = false;
+        }
     }
 
 	void display() {
 		stroke(couleur, 20);
 		strokeWeight(12);
-		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/20.)*.2 , false);
+		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2 , false);
 
 		stroke(couleur, 30);
 		strokeWeight(8);
-		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/20.)*.2, false);
+		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2, false);
 		
 		stroke(couleur);
 		strokeWeight(2);
-		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/20.)*.2, false);
+		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2, false);
 	}
 
 	void polygon(PVector location, int nbCotes, int radius, float angle, float amplitude, boolean bordRond) {
