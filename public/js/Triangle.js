@@ -34,8 +34,8 @@ function Triangle(_nbCotes, _couleur, _rayon) {
   }
 
   this.move = function() {
-  	this.x = constrain( this.x, this.r, width - this.r );
-  	this.y = constrain( this.y, this.r, height - this.r );
+    this.x = constrain( this.x, this.r, width - this.r );
+    this.y = constrain( this.y, this.r, height - this.r );
     this.rotate += this.vx/2000;
 
     if (this.rotate >= 360) {
@@ -52,23 +52,23 @@ function Triangle(_nbCotes, _couleur, _rayon) {
   	this.x = this.x + this.vx * this.vMultiplier;
 
   	// Bounce when touch the edge of the canvas
-  	if (this.x < 0) {
+  	if (this.x < this.r) {
   		this.x = 0;
   		this.vx = -this.vx * this.bMultiplier;
   		setBounceEffect();
   	}
-   	if (this.y < 0) {
+   	if (this.y < this.r) {
    		this.y = 0;
    		this.vy = -this.vy * this.bMultiplier;
   		setBounceEffect();
    	}
-   	if (this.x > width - 20) {
-   		this.x = width - 20;
+   	if (this.x > width - this.r) {
+   		this.x = width - this.r;
    		this.vx = -this.vx * this.bMultiplier;
   		setBounceEffect();
    	}
-   	if (this.y > height - 20) {
-   		this.y = height - 20;
+   	if (this.y > height - this.r) {
+   		this.y = height - this.r;
    		this.vy = -this.vy * this.bMultiplier;
   		setBounceEffect();
    	}

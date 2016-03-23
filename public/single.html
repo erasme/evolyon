@@ -24,17 +24,17 @@
 		<!--<canvas id="particle" class="hidden" data-processing-sources="Shapes_3/Triangle.pde Shapes_3/Shapes_3.pde"></canvas>-->
 
 		<div id="particle" class="hidden"></div>
-
+<!-- 
 		<div id="debug">
   		<a href="javascript:window.location.href=window.location.href">RELOAD</a>
-		</div>
+		</div> -->
 
 	</div>
 
 
 
 
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+	<script type="text/javascript" src="/lib/jquery-2.2.2.min.js"></script>
   <script type="text/javascript" src="/lib/p5.js"></script>
 	<script type="text/javascript" src="/lib/hammer.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -65,12 +65,14 @@
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
 			hammertime2.on("press",function(ev){
         console.log("j'ai appuyé");
-				
+				$('.chargement').removeClass('hidden');
+
 			});
 
 			hammertime2.on("pressup", function(ev) {
 					console.log("pressUp")
 					socket.emit( 'phoneReady');
+					$('.chargement').addClass('hidden');
 			});/* je touche plus donc je cache le chargement*/
 
 
@@ -92,7 +94,6 @@
 				$("#btnActivate").remove();
 				$("#particle").removeClass('hidden');
 
-				var pjs = Processing.getInstanceById("cells");
 			  start();
 				console.log(data);
 				triangle.nbCotes = data.nbCotes;
