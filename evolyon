@@ -1,20 +1,29 @@
 #! /bin/bash
 
 PORT=3010
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-parentdir="$(dirname "$CURRENT_DIR")"
+# CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# parentdir="$(dirname "$CURRENT_DIR")"
+parentdir=/home/erasme/www/erasme
+
+function evo_start {
+  export PORT=$PORT && forever start -o $parentdir/log/out.log -e $parentdir/log/error.log -a $parentdir/evolyon/ootsidebox-client/ootside.js -p $parentdir/run
+}
+
+function evo_stop {
+  forever stop -l $PORT -a $parentdir/evolyon/ootsidebox-client/ootside.js -p $parentdir/run
+}
 
 case "$1" in
  start)
-   export PORT=$PORT && forever start -o $parentdir/log/out.log -e $parentdir/log/error.log -a ootsidebox-client/ootside.js -p $parentdir/run
+    evo_start
    ;;
  stop)
-   forever stop -l $PORT -a ootsidebox-client/ootside.js -p $parentdir/run
+    evo_stop
    ;;
  restart)
-   forever stop -l $PORT -a ootsidebox-client/ootside.js -p $parentdir/run
-   sleep 20
-   export PORT=$PORT && forever start -o $parentdir/log/out.log -e $parentdir/log/error.log -a ootsidebox-client/ootside.js -p $parentdir/run
+   evo_stop
+   sleep 1
+   evo_start
    ;;
  *)
    echo "Usage: evolyon {start|stop|restart}" >&2
