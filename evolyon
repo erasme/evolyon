@@ -4,8 +4,8 @@ OOTSIDE_PORT=5000
 WEB_PORT=3010
 # CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # parentdir="$(dirname "$CURRENT_DIR")"
-# parentdir=/home/erasme/www/erasme
-parentdir=/home/clemsos/Dev/erasme
+parentdir=/home/erasme/www/erasme
+# parentdir=/home/clemsos/Dev/erasme
 
 function init {
   mkdir -p $parentdir/log
