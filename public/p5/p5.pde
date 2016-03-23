@@ -34,9 +34,9 @@ void draw() {
 
 
 void emitCell() {
-	// console.log("emitCell");
-	Cell c = cells.get(int(random(cells.size())));
-	c.selected = true;
+	console.log("emitCell");
+	// Cell c = cells.get(int(random(cells.size())));
+	// c.selected = true;
 }
 
 void keyPressed() {

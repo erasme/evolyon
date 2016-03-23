@@ -26,13 +26,13 @@ redisPhone.on('connect', function() {
 
 
 // listen to cell phone activty
-redisCell.on('connect', function() {
+redisPhone.on('connect', function() {
     console.log('Redis client (cells) connected on '+ redisHost+":"+ redisPort);
 });
 
 // subscribe to redis
-redisPhone.subscribe("evolyonCell");
-redisPhone.on("message", function(channel, message){
+redisCell.subscribe("evolyonCell");
+redisCell.on("message", function(channel, message){
   //pop off new item
   console.log("new cell");
   console.log(channel, message);
@@ -60,6 +60,9 @@ app.get( '/cells/', function( req, res ) {
     res.sendFile( path.join(__dirname, 'public', 'cells.html') );
 } );
 
+app.get( '/mire/', function( req, res ) {
+    res.sendFile( path.join(__dirname, 'public', 'mire.html') );
+} );
 
 server.listen( port, function() {
     console.log( 'Server listening at port %d', port );
@@ -84,6 +87,6 @@ io.on( 'connection', function( socket ) {
 
     socket.on( 'phoneReady', function() {
         console.log( "phone is ready, yo !" );
-        redisPhone.publish("evolyonPhone", "new cell is ready");
+        redisPhone.publish("evolyonPhone", "someone wants a cell");
     });
 } );

@@ -68,9 +68,12 @@ socket.on( 'mouseUp', function( data ) {
 	mouseUpEvent( gesture.x, gesture.y );
 } );
 
-socket.on( 'phoneReady', function( data ) {
-	console.log( "display cell" );
-} );
+socket.on( 'phoneReady', function( data ){
+	console.log("display cell");
+	var pjs = Processing.getInstanceById("cells");
+	pjs.emitCell();
+});
+
 
 /////////////////////////////////////////////
 var _isDown, _points, _r, _g, _rc;
