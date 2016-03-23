@@ -62,22 +62,22 @@ void keyPressed() {
 }
 
 void newTriangle() {
-	int x =int( random(0, width));
-	int y = int(random(0,height));
+	int x = ootsideBox.x;
+	int y = ootsideBox.y-60;
 	Cell c = (Cell) new Triangle(x, y);
 	ps.cells.add(c);
 }
 
 void newBlob() {
-	int x =int( random(0, width));
-	int y = int(random(0,height));
+	int x = ootsideBox.x;
+	int y = ootsideBox.y-60;
 	Cell c = (Cell) new Blob(x, y);
 	ps.cells.add(c);
 }
 
 void newSquare() {
-	int x =int( random(0, width));
-	int y = int(random(0,height));
+	int x = ootsideBox.x;
+	int y = ootsideBox.y-60;
 	Cell c = (Cell) new Square(x, y);
 	ps.cells.add(c);
 }
