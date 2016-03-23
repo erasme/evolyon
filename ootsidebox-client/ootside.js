@@ -273,7 +273,7 @@ ootsidebox.on( 'data', function( data, err ) {
         // console.log( currentEvent );
     } else if ( currentEvent && Date.now() - prevTime > minTimeDiffBetweenEvents ) {
         io.emit( currentEvent, normedGesture );
-        console.log( currentEvent );
+        // console.log( currentEvent );
         prevTime = Date.now();
     }
 

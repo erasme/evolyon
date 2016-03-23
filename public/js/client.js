@@ -71,6 +71,8 @@ socket.on( 'mouseUp', function( data ) {
 
 socket.on( 'phoneReady', function( data ){
 	console.log("display cell");
+  var pjs = Processing.getInstanceById("cells");
+  pjs.emitCell();
 });
 
 
