@@ -1,0 +1,23 @@
+#! /bin/bash
+
+PORT=3010
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+parentdir="$(dirname "$CURRENT_DIR")"
+
+case "$1" in
+ start)
+   export PORT=$PORT && forever start -o $parentdir/log/out.log -e $parentdir/log/error.log -a ootsidebox-client/ootside.js -p $parentdir/run
+   ;;
+ stop)
+   forever stop -l $PORT -a ootsidebox-client/ootside.js -p $parentdir/run
+   ;;
+ restart)
+   forever stop -l $PORT -a ootsidebox-client/ootside.js -p $parentdir/run
+   sleep 20
+   export PORT=$PORT && forever start -o $parentdir/log/out.log -e $parentdir/log/error.log -a ootsidebox-client/ootside.js -p $parentdir/run
+   ;;
+ *)
+   echo "Usage: evolyon {start|stop|restart}" >&2
+   exit 3
+   ;;
+esac
