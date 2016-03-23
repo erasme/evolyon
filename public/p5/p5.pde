@@ -63,21 +63,21 @@ void keyPressed() {
 
 void newTriangle() {
 	int x = ootsideBox.x;
-	int y = ootsideBox.y-60;
+	int y = height/4;
 	Cell c = (Cell) new Triangle(x, y);
 	ps.cells.add(c);
 }
 
 void newBlob() {
 	int x = ootsideBox.x;
-	int y = ootsideBox.y-60;
+	int y = height/4;
 	Cell c = (Cell) new Blob(x, y);
 	ps.cells.add(c);
 }
 
 void newSquare() {
 	int x = ootsideBox.x;
-	int y = ootsideBox.y-60;
+	int y = height/4;
 	Cell c = (Cell) new Square(x, y);
 	ps.cells.add(c);
 }

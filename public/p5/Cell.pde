@@ -26,6 +26,7 @@ class Cell {
 
 	boolean sleeping = false;
 	boolean hitting = false;
+	boolean created = true;
 
 
 	Cell() {}

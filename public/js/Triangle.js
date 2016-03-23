@@ -34,7 +34,8 @@ function Triangle(_nbCotes, _couleur, _rayon) {
   }
 
   this.move = function() {
-
+  	this.x = constrain( this.x, this.r, width - this.r );
+  	this.y = constrain( this.y, this.r, height - this.r );
     this.rotate += this.vx/2000;
 
     if (this.rotate >= 360) {
@@ -48,7 +49,9 @@ function Triangle(_nbCotes, _couleur, _rayon) {
   	this.ay = rotationY;
 
   	this.vx = this.vx + this.ay + accelerationY*2;
+  	this.vx = min( this.vx, 10);
   	this.vy = this.vy + this.ax + accelerationX*2;
+  	this.vy = min( this.vy, 10);
 
   	this.y = this.y + this.vy * this.vMultiplier;
   	this.x = this.x + this.vx * this.vMultiplier;
