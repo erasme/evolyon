@@ -4,7 +4,8 @@ int NB_CELLS = 10; // init cell numbers
 // int frameDrop;
 ParticleSystem ps;
 
-PVector gravity = new PVector(0, 0.1);
+PVector gravity;
+PVector ootsideBox;
 
 void setup() {
 	size(w, h);
@@ -20,6 +21,7 @@ void setup() {
 	}
 	
 	gravity = new PVector(0, 0.1);
+	ootsideBox = new PVector(width/2, height/2);
 	// ps.sleep();
 	ps.awake();
 }
@@ -31,7 +33,7 @@ void draw() {
 
 	ps.run();
 
-	ellipse(width/2,height/2,100,100);
+	ellipse(width/2,height/2-80,130,130);
 }
 
 
@@ -62,21 +64,21 @@ void newTriangle() {
 	int x =int( random(0, width));
 	int y = int(random(0,height));
 	Cell c = (Cell) new Triangle(x, y);
-	cells.add(c);
+	ps.cells.add(c);
 }
 
 void newBlob() {
 	int x =int( random(0, width));
 	int y = int(random(0,height));
 	Cell c = (Cell) new Blob(x, y);
-	cells.add(c);
+	ps.cells.add(c);
 }
 
 void newSquare() {
 	int x =int( random(0, width));
 	int y = int(random(0,height));
 	Cell c = (Cell) new Square(x, y);
-	cells.add(c);
+	ps.cells.add(c);
 }
 
 void split(){

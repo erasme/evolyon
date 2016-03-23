@@ -127,10 +127,10 @@ class Cell {
         int count = 0;
 
         //Collide with center
-        /*float d1 = PVector.dist(location, new PVector(width/2, height/2));
+        float d1 = PVector.dist(location, ootsideBox);
         if ((d1 > 0) && (d1 < rayon + 100)) {
             // Calculate vector pointing away from neighbor
-            PVector diff = PVector.sub(location, new PVector(width/2, height/2));
+            PVector diff = PVector.sub(location, ootsideBox);
             diff.normalize();
             diff.div(d);        // Weight by distance
             sum.add(diff);
@@ -138,7 +138,7 @@ class Cell {
     		
     		hitting = true;
         }
-*/
+
 
         for (Cell other : cells) {
             float d = PVector.dist(location, other.location);
