@@ -127,7 +127,7 @@ class Cell {
         int count = 0;
 
         //Collide with center
-        float d1 = PVector.dist(location, ootsideBox);
+        /*float d1 = PVector.dist(location, ootsideBox);
         if ((d1 > 0) && (d1 < rayon + 100)) {
             // Calculate vector pointing away from neighbor
             PVector diff = PVector.sub(location, ootsideBox);
@@ -137,7 +137,7 @@ class Cell {
             count++;            // Keep track of how many
     		
     		hitting = true;
-        }
+        }*/
 
 
         for (Cell other : cells) {
