@@ -60,7 +60,8 @@
 
 
 			socket.on( 'newCell', function( data ){
-  			mobileGetCell({nbCotes:3});
+				console.log(data)
+  			mobileGetCell({nbCotes:data.nbCotes});
 			});
 
 			var touchZone = document.getElementsByTagName('html')[0];
