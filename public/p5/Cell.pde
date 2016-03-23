@@ -37,8 +37,8 @@ class Cell {
         velocity = new PVector(0, 0);
 
 		nbCotes = nbCotes_;
-		maxspeed = (nbCotes == 3) ? 3 : 
-					(nbCotes == 4) ? 1 : 
+		maxspeed = (nbCotes == 3) ? 3 :
+					(nbCotes == 4) ? 1 :
 					.5;
 		rayon = int( random(15, RADIUS_MAX));
 		tarRayon = rayon;
@@ -87,7 +87,7 @@ class Cell {
 			if( frameCount % 25 ) tarAngle = random(360);
 			angle = ease(angle, tarAngle, 0.1);
 
-	        if(once && frameCount - selectedTime > 500){
+	        if(once && frameCount - selectedTime > 200){
 	        	tarRayon = 0;
 
 				socket.emit("emitCell", {
@@ -136,7 +136,7 @@ class Cell {
             diff.div(d1);        // Weight by distance
             sum.add(diff);
             count++;            // Keep track of how many
-    		
+
     		hitting = true;
         }
 
@@ -150,7 +150,7 @@ class Cell {
                 diff.div(d);        // Weight by distance
                 sum.add(diff);
                 count++;            // Keep track of how many
-        		
+
         		hitting = true;
         		if(!other.hitting){
         			if(random(1)>.5){
@@ -186,7 +186,7 @@ class Cell {
 		stroke(couleur, 30);
 		strokeWeight(8);
 		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2, false);
-		
+
 		stroke(couleur);
 		strokeWeight(2);
 		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2, false);
