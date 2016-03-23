@@ -6,8 +6,14 @@ var abribus = {
 	"width": 176
 };
 
-var h = window.innerHeight - 50;
+var h = window.innerHeight;
 var w = ( 120 / 176 ) * h;
+
+if(w > window.innerWidth) {
+	w = window.innerWidth;
+	h = window.innerWidth*(176/120);
+}
+
 var gesture = {
 	x: 0,
 	y: 0,

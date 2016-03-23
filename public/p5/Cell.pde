@@ -25,7 +25,7 @@ class Cell {
 	int selectedTime = 0;
 	boolean appearing;
 	boolean colliding = true;
-	boolean isColliding = true;
+	int collidingTime = 0;
 
 
 	Cell() {}
@@ -37,9 +37,9 @@ class Cell {
 		// target = new PVector(random (rayon, width-rayon), random (rayon, height-rayon) );
 
 		nbCotes = nbCotes_;
-		topspeed = (nbCotes == 3) ? 3 : 
-					(nbCotes == 4) ? 1 : 
-					1.5; 
+		topspeed = (nbCotes == 3) ? 1.5 : 
+					(nbCotes == 4) ? .5 : 
+					1.; 
 		rayon = int( random(15, RADIUS_MAX));
 		tarRayon = rayon;
 		cellRayon = rayon;
@@ -85,10 +85,10 @@ class Cell {
 	}
 
 	void update() {
-        /*if( frameCount % (delay*3) == 0 ) {
+        if( frameCount % (delay*3) == 0 ) {
             acceleration = PVector.random2D();
             acceleration.mult(random(2));
-        }*/
+        }
 
         velocity.add(acceleration);
         velocity.limit(topspeed);
@@ -176,7 +176,7 @@ class Cell {
 		float d = PVector.dist(location, other.location);
 		float sumR = rayon + other.rayon;
 
-		if (!colliding && d < sumR) {
+		if (frameCount - collidingTime > 20 && frameCount - other.collidingTime > 20 && !colliding && d < sumR) {
 			colliding = true;
 			// Direction of one object another
 			PVector n = PVector.sub(other.location, location);
@@ -198,10 +198,9 @@ class Cell {
 			} else {
 				other.onCollision(this);
 			}
+			return true;
 		} 
-		else if (d > sumR) {
-			colliding = false;
-		}
+		else return false;
 	}
 
 	void display() {

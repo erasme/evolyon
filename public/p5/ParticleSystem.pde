@@ -45,20 +45,20 @@ class ParticleSystem {
             }
 
 			boolean newHit = false;
-
 			for ( int j=i-1; j >= 0; j-- ) {
 				Cell c2 = cells.get( j );
-				if(c.collideEqualMass( c2 )){
+				if(!c.colliding && c.collideEqualMass( c2 )){
 					newHit = true;
-					c2.isColliding = true;
+					c2.collidingTime = frameCount;
+					c2.colliding = true;
+					
+					c.collidingTime = frameCount;
+					c.colliding = true;
 				}
 			}
 
 			if( !newHit ){
 				c.colliding = false;
-			}
-			else{
-				c.isColliding = true;
 			}
 		}
     }
