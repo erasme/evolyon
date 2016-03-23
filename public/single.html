@@ -33,12 +33,9 @@
 
 
 
-  <!-- // <script src="/socket.io/socket.io.js"></script> -->
-  <!-- // <script src="/lib/dollar.js"></script> -->
-	<!-- // <script type="text/javascript" src="/js/client.js"></script> -->
+
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script type="text/javascript" src="/lib/p5.js"></script>
-	<!-- // <script type="text/javascript" language="javascript" src="/lib/p5.sound.min.js"></script> -->
 	<script type="text/javascript" src="/lib/hammer.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
@@ -68,6 +65,7 @@
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
 			hammertime2.on("press",function(ev){
         console.log("j'ai appuyé");
+				
 			});
 
 			hammertime2.on("pressup", function(ev) {
