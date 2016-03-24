@@ -22,6 +22,10 @@ Les logs sont disponibles dans ```../log``` et le pid et autres info sont dans l
 
     ./evolyon init
 
+### Déploiement
+
+Pour déployer en ligne, vous pouvez utiliser Python et [fabric-node-deploy](https://github.com/clemsos/fabric-node-deploy). Cela permet d'automatiser les git pull, server restart, etc.
+
 
 
 
