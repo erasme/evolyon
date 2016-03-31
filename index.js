@@ -21,13 +21,13 @@ var redis = require("redis");
 var redisPhone = redis.createClient(redisPort, redisHost);
 var redisCell = redis.createClient(redisPort, redisHost);
 redisPhone.on('connect', function() {
-    console.log('Redis client (phone) connected on '+ redisHost+":"+ redisPort);
+    console.log('Redis client (redisPhone) connected on '+ redisHost+":"+ redisPort);
 });
 
 
 // listen to cell phone activty
 redisCell.on('connect', function() {
-    console.log('Redis client (cells) connected on '+ redisHost+":"+ redisPort);
+    console.log('Redis client (redisCell) connected on '+ redisHost+":"+ redisPort);
 });
 
 // subscribe to redis
