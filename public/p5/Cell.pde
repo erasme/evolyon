@@ -152,7 +152,7 @@ class Cell {
                 count++;            // Keep track of how many
 
         		hitting = true;
-        		if(!other.hitting){
+        		// if(!other.hitting){
         			if(random(1)>.5){
         				onCollision(other);
         			}
@@ -160,7 +160,7 @@ class Cell {
         				other.onCollision(this);
         			}
         			other.hitting = true;
-        		}
+        		// }
 
             }
         }

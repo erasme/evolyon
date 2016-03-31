@@ -2,15 +2,32 @@
 
 Ecosysteme vivant en réseau pour les abribus urbains
 
+Pour lancer l'app, utiliser le script.
 
-## Installer & Lancer
+    ./evolyon start
+    
+Les ports utilisés sont renseignés dans le script lui-même.
 
-L'application utilise Node JS. Voir [ce tuto](https://openclassrooms.com/courses/des-applications-ultra-rapides-avec-node-js/installer-node-js) pour l'installer.
+Les commandes ```./evolyon stop``` et ```./evolyon restart``` peuvent aussi être utilisées.
 
-    npm install
-    node index.js
+### Configuration
 
-## Structure de l'application
+Le port sur lequel l'ootside est connectée doit être renseigné dans le fichier ```config.js```.
 
-```/``` : homepage  
-```/single/:id``` : affiche une seule cellule à partir de son id
+Pour trouver le port serial utilisé pat l'ootsidebox, utiliser la commande ```dmesg``` et chercher les infos Arduino. Sur Linux, cela devrait être ```/dev/ttcyAM0``` ou  ```/dev/ttcyAM1```.
+
+### Logs
+
+Les logs sont disponibles dans ```../log``` et le pid et autres info sont dans le dossier ```../run```. Pour créer les dossiers lors d'une nouvelle install : 
+
+    ./evolyon init
+
+### Déploiement
+
+Pour déployer en ligne, vous pouvez utiliser Python et [fabric-node-deploy](https://github.com/clemsos/fabric-node-deploy). Cela permet d'automatiser les git pull, server restart, etc.
+
+
+
+
+
+
