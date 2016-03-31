@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+from fabric.api import env
+
+HOME_DIR = "/home/erasme/www/evolyon"
+MAIN_GITHUB_REP = "https://github.com/erasme/evolyon.git"
+APP_NAME =  "evolyon"
+APP_PORT = 3000
+
+# HOME_DIR = "/home/erasme/www/rectoverso"
+# MAIN_GITHUB_REP = "https://github.com/erasme/rectoverso.git"
+# APP_NAME =  "rectoverso"
+# APP_PORT = 5000
+
+def staging():
+    """ Staging server credentials """
+    env.hosts = ['127.0.0.1']
+    env.user  = 'clemsos'
+    env.remote_admin  = 'root'
+    env.port="2022"
+    env.mongo_user = "root"
+
+def lab():
+    """ Staging server credentials """
+    env.hosts = ['lab.erasme.org']
+    env.user  = 'erasme'
+    env.port = "22" # ssh port
+
+def zotac():
+    """ Staging server credentials """
+    env.hosts = ['evolyon.local']
+    env.user  = 'erasme'
+    env.port = "22" # ssh port
