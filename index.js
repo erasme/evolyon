@@ -26,7 +26,7 @@ redisPhone.on('connect', function() {
 
 
 // listen to cell phone activty
-redisPhone.on('connect', function() {
+redisCell.on('connect', function() {
     console.log('Redis client (cells) connected on '+ redisHost+":"+ redisPort);
 });
 
