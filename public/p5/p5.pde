@@ -23,8 +23,8 @@ void setup() {
 	
 	gravity = new PVector(0, 0.1);
 	ootsideBox = new PVector(width/2-8, height/2-100);
-	// ps.sleep();
-	ps.awake();
+	ps.sleep();
+	// ps.awake();
 }
 
 void sleep(){

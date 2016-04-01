@@ -126,7 +126,9 @@ var POS_LENGTH = 20,
     minY = 999, maxY = -999,
     minZ = 999, maxZ = -999,
     prevPresence = false,
-    minTimeBeforeNoPresence = 5000,
+    currentPresence = false,
+    sendOnce = false,
+    minTimeBeforeNoPresence = 40000,
     timePresStarted = 0,
     prevActive = false,
     prevGest = {
@@ -229,6 +231,7 @@ ootsidebox.on( 'data', function( data, err ) {
     updateMinMax( gesture );
 
     var presence = ( gesture.z < 200 );
+    // console.log( presence );
 
     if( presence && phoneReady && Date.now() - timePresStarted > 2000 ){
         //send Cell to Phone
@@ -236,16 +239,23 @@ ootsidebox.on( 'data', function( data, err ) {
         phoneReady = false;
     }
 
-    // console.log( presence );
     if( !prevPresence && presence ){
+    	currentPresence = true;
         timePresStarted = Date.now();
         io.emit('presence', { 'presence': true });
         console.log('presence', { 'presence': true });
+    	sendOnce = true;
     }
-    else if( prevPresence && !presence && Date.now() - timePresStarted >  minTimeBeforeNoPresence ){
+    else if( prevPresence && !presence ){
+    	currentPresence = false;
+    }
+
+    if( !currentPresence && Date.now() - timePresStarted >  minTimeBeforeNoPresence && sendOnce ){
         io.emit('presence', { 'presence': false });
+		sendOnce = false;        
         console.log('presence', { 'presence': false });
     }
+
     prevPresence = presence;
 
     var active = ( gesture.z < 50 );

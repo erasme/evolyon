@@ -38,6 +38,10 @@ class ParticleSystem {
 		for (int i = cells.size()-1; i >= 0; i--) {
 			Cell c = cells.get(i);
         	if(sleeping) c.applyForce(gravity);
+        	if( c.kicked ){
+        		c.applyForce(c.kickedForce);
+        		c.kicked = false;
+        	}
 
 			c.separate(cells);
             c.update();

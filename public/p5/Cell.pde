@@ -27,12 +27,16 @@ class Cell {
 	boolean sleeping = false;
 	boolean hitting = false;
 	boolean created = true;
+	int wakeupTime = -2000;
 
+	boolean kicked = false;
+	PVector kickedForce;
 
 	Cell() {}
 
 	Cell(float locationX_, float locationY_, int nbCotes_, float angle_, float amplitude_) {
 		location = new PVector( locationX_, locationY_ );
+		tarLocation = new PVector(random(width),random(height));
         acceleration = new PVector(random(1, 5), random(1,5));
         velocity = new PVector(0, 0);
 
@@ -61,12 +65,9 @@ class Cell {
 		selectedTime = frameCount;
 	}
 
-	boolean kicked = false;
-	int originKicked;
-	int kickDuration = 10;
-	void kick() {
-		originKicked = frameCount;
+	void kick(PVector force) {
 		kicked = true;
+		kickedForce = new PVector(force.x, force.y);
 	}
 
 	void disappear() {
@@ -98,16 +99,23 @@ class Cell {
 				once = false;
 	        }
 		} else {
-            // Update velocity
-            velocity.add(acceleration);
-            // Limit speed
-            velocity.limit(maxspeed);
+			if(frameCount - wakeupTime < 200){
+	        	location.x = ease(location.x, tarLocation.x, 0.05);
+				location.y = ease(location.y, tarLocation.y, 0.05);
+			}
+			else{
+				rayon = ease(rayon, tarRayon, 0.05);
+	            // Update velocity
+	            velocity.add(acceleration);
+	            // Limit speed
+	            velocity.limit(maxspeed);
 
-            location.add(velocity);
-            checkBoundaries();
+	            location.add(velocity);
+	            checkBoundaries();
 
-            // Reset accelertion to 0 each cycle
-            acceleration.mult(0);
+	            // Reset accelertion to 0 each cycle
+	            acceleration.mult(0);
+			}
         }
     }
 
@@ -150,17 +158,18 @@ class Cell {
                 diff.div(d);        // Weight by distance
                 sum.add(diff);
                 count++;            // Keep track of how many
-
-        		hitting = true;
-        		// if(!other.hitting){
-        			if(random(1)>.5){
-        				onCollision(other);
-        			}
-        			else{
-        				other.onCollision(this);
-        			}
-        			other.hitting = true;
-        		// }
+                if(!sleeping){
+            		hitting = true;
+            		if(!other.hitting){
+            			if(random(1)>.5){
+            				onCollision(other);
+            			}
+            			else{
+            				other.onCollision(this);
+            			}
+            			other.hitting = true;
+            		}
+            	}
 
             }
         }
@@ -235,6 +244,21 @@ class Cell {
 	}
 
 	void onCollision(Cell targetCell) {
+		switch(nbCotes){
+			case 3:
+				if(ps.cells.size() < 80){
+					ps.addNewRandomCell(targetCell.location.x, targetCell.location.y);
+				}
+				break;
+			case 4:
+				targetCell.kick(velocity);
+				break;
+			case 8:
+		        if (ps.cells.size() > 20) {
+		        	targetCell.disappear();
+		        }
+				break;
+		}
 	}
 };
 
