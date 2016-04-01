@@ -52,8 +52,8 @@ void presence(){
         if ((d1 > 0) && (d1 < ootsideBoxSize + 100)) {
             // Calculate vector pointing away from neighbor
             PVector diff = PVector.sub(c.location, ootsideBox);
-            diff.normalize();
-            diff.div(d1);        // Weight by distance
+            // diff.normalize();
+            // diff.div(d1);        // Weight by distance
 			c.applyForce(diff);    		
         }
 	}
