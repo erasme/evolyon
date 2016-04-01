@@ -60,7 +60,7 @@
 			mobileGetCell(data);
 		});
 
-		var touchZone = document.getEleentsByTagName('html')[0];
+		var touchZone = document.getElementsByTagName('html')[0];
 
 		var hammertime = new Hammer(touchZone);/* variable pour détecter le touch*/
 		hammertime.on("press",function(ev){
