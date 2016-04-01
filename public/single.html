@@ -63,36 +63,23 @@
 			var touchZone = document.getElementsByTagName('html')[0];
 
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
-			hammertime2.on("press",function(ev){
-        console.log("j'ai appuyé");
-				$('.chargement').removeClass('hidden');
-
+			hammertime2.on("pressdown",function(ev){
+					socket.emit( 'phoneReady');
+					$('.chargement').removeClass('hidden');
 			});
 
 			hammertime2.on("pressup", function(ev) {
 					console.log("pressUp")
-					socket.emit( 'phoneReady');
 					$('.chargement').addClass('hidden');
 			});/* je touche plus donc je cache le chargement*/
 
 
-			var hammertime = new Hammer(touchZone);/* variable pour détecter le touch*/
-			hammertime.get('press').set({
-				time : 4000,
-				pointers : 1,
-				threshold : 10
-			});/* options pour le touch dont la variable est var hammertime*/
-
-			// hammertime.on("press", function(ev) {
-			//
-			//
-			// });/* au bout de 3 secondes j'enleve le bouton activate et j'affiche le canvas processing*/
-
 
       function mobileGetCell(data) {
   			console.log("display cell");
-				$("#btnActivate").remove();
-				$("#particle").removeClass('hidden');
+			$('.chargement').addClass('hidden');
+			$("#btnActivate").remove();
+			$("#particle").removeClass('hidden');
 
 			  start();
 				console.log(data);
