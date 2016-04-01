@@ -126,7 +126,7 @@ var POS_LENGTH = 20,
     minY = 999, maxY = -999,
     minZ = 999, maxZ = -999,
     prevPresence = false,
-    minTimeBeforeNoPresence = 10000,
+    minTimeBeforeNoPresence = 5000,
     timePresStarted = 0,
     prevActive = false,
     prevGest = {
@@ -230,7 +230,7 @@ ootsidebox.on( 'data', function( data, err ) {
 
     var presence = ( gesture.z < 200 );
 
-    if( presence && phoneReady && Date.now() - timePresStarted > 3000 ){
+    if( presence && phoneReady && Date.now() - timePresStarted > 2000 ){
         //send Cell to Phone
         io.emit( 'phoneReady', {} );
         phoneReady = false;
