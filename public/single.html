@@ -63,7 +63,7 @@
 			var touchZone = document.getElementsByTagName('html')[0];
 
 			var hammertime2 = new Hammer(touchZone);/* variable pour détecter le touch*/
-			hammertime2.on("pressdown",function(ev){
+			hammertime2.on("press",function(ev){
 					socket.emit( 'phoneReady');
 					$('.chargement').removeClass('hidden');
 			});
