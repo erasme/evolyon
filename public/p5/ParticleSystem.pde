@@ -1,6 +1,7 @@
 class ParticleSystem {
     ArrayList<Cell> cells;
     boolean sleeping = false;
+    int awakeTime = 0;
 
     ParticleSystem() {
         cells = new ArrayList<Cell>();
@@ -21,6 +22,26 @@ class ParticleSystem {
 			c = new Square(x, y);
 			break;
 		case 2 :
+			c = new Blob(x, y);
+			break;
+		}
+		cells.add( c );
+	}
+
+	void addNewCell(float _x, float _y, int cellType) {
+		float x = _x;
+		float y = _y;
+
+		Cell c = new Cell();
+
+		switch(cellType) {
+		case 3 :
+			c = new Triangle(x, y);
+			break;
+		case 4 :
+			c = new Square(x, y);
+			break;
+		case 8 :
 			c = new Blob(x, y);
 			break;
 		}
@@ -60,6 +81,7 @@ class ParticleSystem {
 	
 	void awake() {
 		sleeping = false;
+		awakeTime = frameCount;
 		for (int i=0; i<cells.size(); i++) {
 			Cell c = cells.get(i);
 			c.sleeping = false;

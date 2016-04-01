@@ -158,7 +158,7 @@ class Cell {
                 diff.div(d);        // Weight by distance
                 sum.add(diff);
                 count++;            // Keep track of how many
-                if(!sleeping){
+                if( !sleeping && frameCount - ps.awakeTime > 50 ){
             		hitting = true;
             		if(!other.hitting){
             			if(random(1)>.5){
@@ -247,7 +247,7 @@ class Cell {
 		switch(nbCotes){
 			case 3:
 				if(ps.cells.size() < 80){
-					ps.addNewRandomCell(targetCell.location.x, targetCell.location.y);
+					ps.addNewCell(targetCell.location.x, targetCell.location.y, targetCell.nbCotes);
 				}
 				break;
 			case 4:

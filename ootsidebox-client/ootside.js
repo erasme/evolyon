@@ -32,10 +32,10 @@ redisCell.on('connect', function() {
 // subscribe to redis
 redisPhone.subscribe("evolyonPhone");
 redisPhone.on("message", function(channel, message){
-  //pop off new item
-  console.log("redis-message");
-  console.log(message);
-  phoneReady = true;
+	//pop off new item
+	console.log("redis-message");
+	console.log(message);
+	phoneReady = true;
 });
 
 /*
@@ -218,7 +218,7 @@ ootsidebox.open( function( error ) {
 // parse raw data
 ootsidebox.on( 'data', function( data, err ) {
     var raw = data.split( "|" );
-    if ( raw.length == 1 ) sendRawInstructions(); // make sure the V is sent
+    // if ( raw.length == 1 ) sendRawInstructions(); // make sure the V is sent
 
     var gesture = {
         x: parseInt( raw[ 4 ] ),
@@ -231,12 +231,6 @@ ootsidebox.on( 'data', function( data, err ) {
 
     var presence = ( gesture.z < 200 );
     // console.log( presence );
-
-    if( presence && phoneReady && Date.now() - timePresStarted > 2000 ){
-        //send Cell to Phone
-        io.emit( 'phoneReady', {} );
-        phoneReady = false;
-    }
 
     if( !prevPresence && presence ){
     	currentPresence = true;
@@ -253,6 +247,12 @@ ootsidebox.on( 'data', function( data, err ) {
         io.emit('presence', { 'presence': false });
 		sendOnce = false;        
         console.log('presence', { 'presence': false });
+    }
+
+    if( currentPresence && phoneReady && Date.now() - timePresStarted > 2000 ){
+        //send Cell to Phone
+        io.emit( 'phoneReady', {} );
+        phoneReady = false;
     }
 
     prevPresence = presence;
