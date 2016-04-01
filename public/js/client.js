@@ -27,12 +27,15 @@ socket.on( 'connect', function( data ) {
 	console.log( "connected to socket" );
 } );
 
+var lastPresenceTime = Date.now();
 socket.on( 'presence', function( data ) {
 	console.log( 'presence:', data.presence );
 	var pjs = Processing.getInstanceById( "cells" );
 	if ( data.presence ) {
-		// pjs.presence();
-		pjs.awake();
+		if(Date.now() - lastPresenceTime > 40000 ) {
+			lastPresenceTime = Date.now();
+			pjs.awake();
+		}
 	} else {
 		pjs.sleep();
 	}

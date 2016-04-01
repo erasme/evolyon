@@ -111,7 +111,6 @@ io.on( 'connection', function( socket ) {
        /_ </ / / /  / /_/ / __ `/ __  /
      ___/ / /_/ /  / ____/ /_/ / /_/ /
     /____/_____/  /_/    \__,_/\__,_/
-
 */
 var serialport = require( "serialport" );
 var SerialPort = serialport.SerialPort;
@@ -298,18 +297,11 @@ ootsidebox.on( 'data', function( data, err ) {
       / /|_/ / __ `/ __/ __ \   / /_/ / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
      / /  / / /_/ / /_/ / / /  / __/ /_/ / / / / /__/ /_/ / /_/ / / / (__  )
     /_/  /_/\__,_/\__/_/ /_/  /_/  \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
-
 */
 function randomInt( min, max ) {
     return~~ ( Math.random() * ( max - min + 1 ) + min );
 }
 
-function ease( value, target, easingVal ) {
-    var d = target - value;
-    if ( Math.abs( d ) > 1 ) value += d * easingVal;
-    return value;
-}
-
 function map( n, start1, stop1, start2, stop2 ) {
     return ( ( n - start1 ) / ( stop1 - start1 ) ) * ( stop2 - start2 ) + start2;
-};
+}
