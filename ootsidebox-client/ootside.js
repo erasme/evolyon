@@ -218,7 +218,7 @@ ootsidebox.open( function( error ) {
 // parse raw data
 ootsidebox.on( 'data', function( data, err ) {
     var raw = data.split( "|" );
-    // if ( raw.length == 1 ) sendRawInstructions(); // make sure the V is sent
+    if ( raw.length == 1 ) sendRawInstructions(); // make sure the V is sent
 
     var gesture = {
         x: parseInt( raw[ 4 ] ),
