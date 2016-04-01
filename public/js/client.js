@@ -31,10 +31,10 @@ socket.on( 'presence', function( data ) {
 	console.log( 'presence:', data.presence );
 	var pjs = Processing.getInstanceById( "cells" );
 	if ( data.presence ) {
-		pjs.presence();
-		// pjs.awakeAll();
+		// pjs.presence();
+		pjs.awake();
 	} else {
-		// pjs.sleepAll();
+		pjs.sleep();
 	}
 } );
 

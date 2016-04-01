@@ -27,7 +27,13 @@ void setup() {
 	ps.awake();
 }
 
+void sleep(){
+	ps.sleep();
+}
 
+void awake(){
+	ps.awake();
+}
 
 void draw() {
 	background(#241f38);
