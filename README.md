@@ -2,19 +2,30 @@
 
 Ecosysteme vivant en réseau pour les abribus urbains
 
-Pour lancer l'app, utiliser le script.
+#### Pour lancer l'app côté client (au démarrage de la machine) :
 
-    ./evolyon start
-    
-Les ports utilisés sont renseignés dans le script lui-même.
+``cd www/evolyon/evolyon/ootsidebox-client && sudo node ootside.js``
 
-Les commandes ```./evolyon stop``` et ```./evolyon restart``` peuvent aussi être utilisées.
+#### Pour lancer l'app côté serveur (uniquement pour mettre à jour) :
+
+Depuis une machine en SSH, utiliser Fabric (``sudo apt-get install pip`` et ``pip install fabric``) :
+
+Pour relancer le serveur si besoin :
+
+- Faire un ``fab lab deploy`` depuis une machine en SSH
+
+Si c'est la galère sur le serveur :
+
+1. Faire un ``ps aux | grep forever`` et ``kill XXX`` avec XXX = pid
+2. Faire un ``ps aux | grep node`` et ``kill XXX`` avec XXX = pid
+3. Faire ``fab lab start``
+
 
 ### Configuration
 
 Le port sur lequel l'ootside est connectée doit être renseigné dans le fichier ```config.js```.
 
-Pour trouver le port serial utilisé pat l'ootsidebox, utiliser la commande ```dmesg``` et chercher les infos Arduino. Sur Linux, cela devrait être ```/dev/ttcyAM0``` ou  ```/dev/ttcyAM1```.
+Pour trouver le port serial utilisé pat l'ootsidebox, utiliser la commande ```dmesg``` et chercher les infos Arduino. Sur Linux, cela devrait être ```/dev/ttcyACM0``` ou  ```/dev/ttcyACM1```.
 
 ### Logs
 
