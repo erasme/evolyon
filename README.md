@@ -4,7 +4,7 @@ Ecosysteme vivant en réseau pour les abribus urbains
 
 #### Pour lancer l'app côté client (au démarrage de la machine) :
 
-``cd www/evolyon/evolyon/ootsidebox-client && sudo node ootside.js``
+``cd www/evolyon/evolyon/ootsidebox-client && node ootside.js``
 
 #### Pour lancer l'app côté serveur (uniquement pour mettre à jour) :
 
