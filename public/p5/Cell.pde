@@ -1,5 +1,6 @@
 final static float SPEED = 0.001;
-final static int RADIUS_MAX = 10;
+final static int RADIUS_MIN = 30;
+final static int RADIUS_MAX = 60;
 
 class Cell {
 	PVector location;
@@ -44,7 +45,7 @@ class Cell {
 		maxspeed = (nbCotes == 3) ? 3 :
 					(nbCotes == 4) ? 1 :
 					.5;
-		rayon = int( random(15, RADIUS_MAX));
+		rayon = int( random(RADIUS_MIN, RADIUS_MAX));
 		tarRayon = rayon;
 		cellRayon = rayon;
 		angle = angle_;
