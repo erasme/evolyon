@@ -1,6 +1,6 @@
 final static float SPEED = 0.001;
-final static int RADIUS_MIN = 30;
-final static int RADIUS_MAX = 60;
+final static int RADIUS_MIN = 15;
+final static int RADIUS_MAX = 30;
 
 class Cell {
 	PVector location;
