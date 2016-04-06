@@ -1,6 +1,7 @@
 final static float SPEED = 0.001;
 final static int RADIUS_MIN = 15;
 final static int RADIUS_MAX = 30;
+final static int APPARITION_DURATION = 50;
 
 class Cell {
 	PVector location;
@@ -29,6 +30,7 @@ class Cell {
 	boolean hitting = false;
 	boolean created = true;
 	int wakeupTime = -2000;
+	int apparitionCount = 0;
 
 	boolean kicked = false;
 	PVector kickedForce;
@@ -53,6 +55,7 @@ class Cell {
 		cellEasing = random(0, SPEED);
 		easing = cellEasing;
 		delay = int(random(75, 100));
+		apparitionCount = 0;
 
 		// couleur
 		if (nbCotes_ == 3) couleur = #ff217c;
@@ -82,6 +85,7 @@ class Cell {
 
 	boolean once = true;
     void update() {
+      apparitionCount++;
         if (selected) {
         	location.x = ease(location.x, width/2, 0.05);
 			location.y = ease(location.y, height/4, 0.05);
@@ -114,7 +118,7 @@ class Cell {
 	            location.add(velocity);
 	            checkBoundaries();
 
-	            // Reset accelertion to 0 each cycle
+	            // Reset acceleration to 0 each cycle
 	            acceleration.mult(0);
 			}
         }
@@ -189,6 +193,14 @@ class Cell {
     }
 
 	void display() {
+		
+		if (apparitionCount < APPARITION_DURATION) {
+  		stroke(couleur,100-(apparitionCount/APPARITION_DURATION*100));
+  		strokeWeight(120-apparitionCount/APPARITION_DURATION*20);
+		  ellipse(location.x, location.y, 100-apparitionCount/APPARITION_DURATION*100, 100-apparitionCount/APPARITION_DURATION*100);  		
+		  noFill();
+		}
+		
 		stroke(couleur, 20);
 		strokeWeight(12);
 		polygon(location, nbCotes, rayon, angle, 1+sin((delay+frameCount)/10.)*.2 , false);
