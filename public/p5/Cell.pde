@@ -1,6 +1,6 @@
 final static float SPEED = 0.001;
-final static int RADIUS_MIN = 15;
-final static int RADIUS_MAX = 30;
+final static int RADIUS_MIN = 10;
+final static int RADIUS_MAX = 20;
 final static int APPARITION_DURATION = 50;
 
 class Cell {
@@ -193,13 +193,14 @@ class Cell {
     }
 
 	void display() {
-		
+		/*
 		if (apparitionCount < APPARITION_DURATION) {
   		stroke(couleur,100-(apparitionCount/APPARITION_DURATION*100));
   		strokeWeight(120-apparitionCount/APPARITION_DURATION*20);
 		  ellipse(location.x, location.y, 100-apparitionCount/APPARITION_DURATION*100, 100-apparitionCount/APPARITION_DURATION*100);  		
 		  noFill();
 		}
+		*/
 		
 		stroke(couleur, 20);
 		strokeWeight(12);

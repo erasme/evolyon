@@ -66,12 +66,12 @@ server.listen( port, function() {
 */
 var NB_CELLS = 10;
 var cells = Array.apply( null, Array( NB_CELLS ) ).map( function( d, i ) {
-    return {
-        x: randomInt( 0, 600 ),
-        y: randomInt( 0, 600 ),
-        easing: Math.random() / 50,
-        delay: randomInt( 50, 300 )
-    }
+  return {
+      x: randomInt( 0, 600 ),
+      y: randomInt( 0, 600 ),
+      easing: Math.random() / 50,
+      delay: randomInt( 50, 300 )
+  }
 } );
 
 
