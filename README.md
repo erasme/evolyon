@@ -2,6 +2,10 @@
 
 Ecosysteme vivant en réseau pour les abribus urbains
 
+#### Fonctionnement technique
+
+Un serveur tourne en ligne afin de récupérer les événements de ``touch`` des smartphones. Ce serveur envoie des données en socket à Redis. Un serveur en local récupère ces données Redis et déclenche l'interaction entre le smartphone (en ligne) et la vidéoprojection (en local). 
+
 #### Pour lancer l'app côté client (au démarrage de la machine) :
 
 ``cd www/evolyon/evolyon/ootsidebox-client && node ootside.js``
